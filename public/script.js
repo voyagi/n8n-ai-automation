@@ -4,7 +4,7 @@
 // - timeout: Request timeout in milliseconds
 const CONFIG = {
 	webhookUrl: "http://localhost:5678/webhook/contact-form",
-	webhookAuth: "REPLACE_ME_WITH_YOUR_TOKEN",
+	webhookAuth: "demo-token-2026",
 	timeout: 15000,
 };
 
@@ -139,8 +139,8 @@ form.addEventListener("submit", async (e) => {
 		// Populate AI analysis results
 		document.getElementById("result-category").textContent =
 			result.category || "Processing";
-		document.getElementById("result-response-time").textContent =
-			result.estimatedResponse || "We'll be in touch soon";
+		document.getElementById("result-summary").textContent =
+			result.summary || "Your message is being processed";
 
 		// Hide form, show success card
 		form.classList.add("hidden");
@@ -182,7 +182,7 @@ sendAnother.addEventListener("click", (e) => {
 
 	// Reset result values
 	document.getElementById("result-category").textContent = "—";
-	document.getElementById("result-response-time").textContent = "—";
+	document.getElementById("result-summary").textContent = "—";
 
 	// Clear all validation states
 	fields.forEach((field) => {
