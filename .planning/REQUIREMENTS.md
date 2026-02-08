@@ -87,36 +87,36 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FORM-01 | TBD | Pending |
-| FORM-02 | TBD | Pending |
-| FORM-03 | TBD | Pending |
-| FORM-04 | TBD | Pending |
-| WKFL-01 | TBD | Pending |
-| WKFL-02 | TBD | Pending |
-| WKFL-03 | TBD | Pending |
-| WKFL-04 | TBD | Pending |
-| WKFL-05 | TBD | Pending |
-| WKFL-06 | TBD | Pending |
-| WKFL-07 | TBD | Pending |
-| WKFL-08 | TBD | Pending |
-| STOR-01 | TBD | Pending |
-| STOR-02 | TBD | Pending |
-| NOTF-01 | TBD | Pending |
-| NOTF-02 | TBD | Pending |
-| NOTF-03 | TBD | Pending |
-| DOCS-01 | TBD | Pending |
-| DOCS-02 | TBD | Pending |
-| DOCS-03 | TBD | Pending |
-| DOCS-04 | TBD | Pending |
-| DOCS-05 | TBD | Pending |
-| DOCS-06 | TBD | Pending |
+| FORM-01 | Phase 1 | Pending |
+| FORM-02 | Phase 1 | Pending |
+| FORM-03 | Phase 1 | Pending |
+| FORM-04 | Phase 1 | Pending |
+| WKFL-01 | Phase 2 | Pending |
+| WKFL-02 | Phase 2 | Pending |
+| WKFL-03 | Phase 3 | Pending |
+| WKFL-04 | Phase 3 | Pending |
+| WKFL-05 | Phase 3 | Pending |
+| WKFL-06 | Phase 3 | Pending |
+| WKFL-07 | Phase 4 | Pending |
+| WKFL-08 | Phase 7 | Pending |
+| STOR-01 | Phase 5 | Pending |
+| STOR-02 | Phase 5 | Pending |
+| NOTF-01 | Phase 6 | Pending |
+| NOTF-02 | Phase 6 | Pending |
+| NOTF-03 | Phase 6 | Pending |
+| DOCS-01 | Phase 8 | Pending |
+| DOCS-02 | Phase 8 | Pending |
+| DOCS-03 | Phase 8 | Pending |
+| DOCS-04 | Phase 8 | Pending |
+| DOCS-05 | Phase 8 | Pending |
+| DOCS-06 | Phase 8 | Pending |
 
 **Coverage:**
 
 - v1 requirements: 23 total
-- Mapped to phases: 0
-- Unmapped: 23
+- Mapped to phases: 23
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-08 after initial definition*
+*Last updated: 2026-02-08 after roadmap creation*
