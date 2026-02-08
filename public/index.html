@@ -3,6 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="color-scheme" content="light">
 	<title>Contact Us — AI-Powered Form Demo</title>
 	<link rel="stylesheet" href="styles.css">
 </head>
@@ -10,40 +11,55 @@
 	<div class="container">
 		<header>
 			<h1>Contact Us</h1>
-			<p>Your message will be processed by AI and routed to the right team.</p>
+			<p>See AI-powered contact routing in action. Submit a message and watch it get classified, summarized, and routed automatically.</p>
 		</header>
 
-		<form id="contact-form">
-			<div class="form-group">
-				<label for="name">Name</label>
-				<input type="text" id="name" name="name" required placeholder="Your full name">
+		<div id="error-banner" class="error-banner hidden"></div>
+
+		<form id="contact-form" novalidate>
+			<div class="form-row">
+				<div class="form-group">
+					<input type="text" id="name" name="name" placeholder="Your full name" required>
+					<label for="name">Name</label>
+					<span class="field-error" data-for="name" aria-live="polite"></span>
+				</div>
+
+				<div class="form-group">
+					<input type="email" id="email" name="email" placeholder="you@example.com" required>
+					<label for="email">Email</label>
+					<span class="field-error" data-for="email" aria-live="polite"></span>
+				</div>
 			</div>
 
 			<div class="form-group">
-				<label for="email">Email</label>
-				<input type="email" id="email" name="email" required placeholder="you@example.com">
-			</div>
-
-			<div class="form-group">
+				<input type="text" id="subject" name="subject" placeholder="What's this about?" required>
 				<label for="subject">Subject</label>
-				<select id="subject" name="subject" required>
-					<option value="">Select a topic...</option>
-					<option value="support">Technical Support</option>
-					<option value="sales">Sales Inquiry</option>
-					<option value="feedback">Feedback</option>
-					<option value="other">Other</option>
-				</select>
+				<span class="field-error" data-for="subject" aria-live="polite"></span>
 			</div>
 
 			<div class="form-group">
+				<textarea id="message" name="message" rows="5" placeholder="Tell us how we can help..." required></textarea>
 				<label for="message">Message</label>
-				<textarea id="message" name="message" required rows="5" placeholder="Tell us how we can help..."></textarea>
+				<span class="field-error" data-for="message" aria-live="polite"></span>
 			</div>
 
-			<button type="submit" id="submit-btn">Send Message</button>
+			<button type="submit" id="submit-btn">
+				<span class="spinner hidden"></span>
+				<span class="btn-text">Send Message</span>
+			</button>
 		</form>
 
-		<div id="status" class="status hidden"></div>
+		<div id="success-card" class="success-card hidden">
+			<div class="checkmark-circle">
+				<svg class="checkmark" viewBox="0 0 52 52">
+					<circle class="checkmark-circle-bg" cx="26" cy="26" r="25" fill="none"/>
+					<path class="checkmark-check" fill="none" d="M14 27l7 7 16-16"/>
+				</svg>
+			</div>
+			<h2>Message sent!</h2>
+			<p>Our AI is analyzing your message and routing it to the right team.</p>
+			<a href="#" id="send-another" class="send-another">Send another message</a>
+		</div>
 
 		<footer>
 			<p>Powered by n8n + OpenAI — <a href="https://github.com/voyagi/upwork-n8n-automation">View source</a></p>
