@@ -68,10 +68,13 @@ Plans:
   3. OpenAI node drafts contextually appropriate suggested response
   4. OpenAI returns spam confidence score (0-100%) for each submission
   5. Test submissions show consistent classification across similar content
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD
+
+- [ ] 03-01-PLAN.md -- Replace Mock AI Response with OpenAI node + Parse AI Response code node in workflow JSON
+- [ ] 03-02-PLAN.md -- Update frontend success card and script.js to display AI category and summary
+- [ ] 03-03-PLAN.md -- End-to-end verification: import workflow, configure OpenAI, test classification
 
 ### Phase 4: Conditional Routing
 **Goal**: Workflow routes spam vs legitimate submissions to different handling paths
