@@ -170,72 +170,7 @@
       "name": "Validation Error",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1170, 480]
-    },
-    {
-      "parameters": {
-        "mode": "manual",
-        "duplicateItem": false,
-        "assignments": {
-          "assignments": [
-            {
-              "id": "mock-category",
-              "name": "category",
-              "value": "general",
-              "type": "string"
-            },
-            {
-              "id": "mock-summary",
-              "name": "summary",
-              "value": "Contact form submission received",
-              "type": "string"
-            },
-            {
-              "id": "mock-response-time",
-              "name": "estimatedResponse",
-              "value": "within 24 hours",
-              "type": "string"
-            },
-            {
-              "id": "passthrough-name",
-              "name": "name",
-              "value": "={{ $json.name }}",
-              "type": "string"
-            },
-            {
-              "id": "passthrough-email",
-              "name": "email",
-              "value": "={{ $json.email }}",
-              "type": "string"
-            },
-            {
-              "id": "passthrough-subject",
-              "name": "subject",
-              "value": "={{ $json.subject }}",
-              "type": "string"
-            },
-            {
-              "id": "passthrough-message",
-              "name": "message",
-              "value": "={{ $json.message }}",
-              "type": "string"
-            },
-            {
-              "id": "passthrough-timestamp",
-              "name": "submittedAt",
-              "value": "={{ $json.submittedAt }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "mock-ai-response",
-      "name": "Mock AI Response",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [940, 300],
-      "notes": "Placeholder that Phase 3 will replace with OpenAI node"
+      "position": [1400, 480]
     },
     {
       "parameters": {
@@ -249,7 +184,7 @@
       "name": "Success Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1170, 300]
+      "position": [1400, 300]
     },
     {
       "parameters": {
@@ -311,7 +246,7 @@
       "main": [
         [
           {
-            "node": "Mock AI Response",
+            "node": "Analyze Contact Form",
             "type": "main",
             "index": 0
           }
@@ -325,7 +260,18 @@
         ]
       ]
     },
-    "Mock AI Response": {
+    "Analyze Contact Form": {
+      "main": [
+        [
+          {
+            "node": "Parse AI Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse AI Response": {
       "main": [
         [
           {
