@@ -10,30 +10,31 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 2 of 8 (Webhook Integration)
-Plan: 0 of TBD in current phase
-Status: Not started
-Last activity: 2026-02-08 — Completed Phase 1 (Foundation & Form Polish)
+Plan: 1 of TBD in current phase
+Status: In progress
+Last activity: 2026-02-08 — Completed 02-01-PLAN.md
 
-Progress: [██░░░░░░░░] 13%
+Progress: [███░░░░░░░] 17%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 3
-- Average duration: 5.3 min
-- Total execution time: 0.27 hours
+- Total plans completed: 4
+- Average duration: 4.8 min
+- Total execution time: 0.32 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 16 min | 5.3 min |
+| 02 | 1 | 3 min | 3.0 min |
 
 **Recent Trend:**
 
-- Last 5 plans: 3 min, 5 min, 8 min
-- Trend: Increasing (n8n setup had Node.js version blocker)
+- Last 5 plans: 5 min, 8 min, 3 min
+- Trend: Stable (faster n8n JSON creation vs form implementation)
 
 *Updated after each plan completion*
 
@@ -53,6 +54,9 @@ Recent decisions affecting current work:
 - Submit button structured with separate spinner and text spans for JS toggle control (01-01)
 - Placeholders set to transparent to prevent overlap with floating labels (01-01 fix)
 - fnm used for Node.js version management (n8n requires <=24.x, system had 25.2.1)
+- Header Auth over Basic Auth for webhook security (more flexible, easier rotation) (02-01)
+- Webhook response mode "When Last Node Finishes" for synchronous AI processing (02-01)
+- Field paths use $json.body.* structure with note for testing adjustment if needed (02-01)
 
 ### Pending Todos
 
@@ -64,6 +68,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-08
-Stopped at: Completed Phase 1 — all 3 plans executed, verified (17/17 must-haves), human-approved
+Last session: 2026-02-08T15:28:21Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
