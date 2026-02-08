@@ -33,10 +33,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Form shows success message after valid submission
   4. Form shows error message when submission fails
   5. n8n instance runs locally at http://localhost:5678 with credentials configured
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 01-01-PLAN.md -- Restructure HTML and rewrite CSS for floating labels, responsive layout, and success card
+- [ ] 01-02-PLAN.md -- Rewrite JavaScript for validation, submission handling, and state management
 
 ### Phase 2: Webhook Integration
 **Goal**: Form submissions flow into n8n workflow for processing
@@ -149,7 +150,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Form Polish | 0/TBD | Not started | - |
+| 1. Foundation & Form Polish | 0/2 | Planned | - |
 | 2. Webhook Integration | 0/TBD | Not started | - |
 | 3. AI Processing Core | 0/TBD | Not started | - |
 | 4. Conditional Routing | 0/TBD | Not started | - |
