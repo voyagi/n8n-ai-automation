@@ -36,6 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 3 plans
 
 Plans:
+
 - [x] 01-01-PLAN.md -- Restructure HTML and rewrite CSS for floating labels, responsive layout, and success card
 - [x] 01-02-PLAN.md -- Rewrite JavaScript for validation, submission handling, and state management
 - [x] 01-03-PLAN.md -- Install n8n, configure .env, verify dashboard at localhost:5678
@@ -49,10 +50,13 @@ Plans:
   2. Webhook trigger node captures complete form payload (name, email, subject, message)
   3. Set node normalizes data into consistent structure for downstream processing
   4. Test submission appears in n8n execution history with parsed fields
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD
+
+- [ ] 02-01-PLAN.md -- Create n8n workflow JSON (webhook + Set + IF validation + mock response) and update .env.example
+- [ ] 02-02-PLAN.md -- Refactor script.js with CONFIG, auth header, timeout, error handling; update success card for AI results
+- [ ] 02-03-PLAN.md -- End-to-end verification: import workflow, test form submission round-trip
 
 ### Phase 3: AI Processing Core
 **Goal**: OpenAI analyzes submissions and provides classification, summary, and draft response
@@ -152,7 +156,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Form Polish | 3/3 | Complete | 2026-02-08 |
-| 2. Webhook Integration | 0/TBD | Not started | - |
+| 2. Webhook Integration | 0/3 | Planned | - |
 | 3. AI Processing Core | 0/TBD | Not started | - |
 | 4. Conditional Routing | 0/TBD | Not started | - |
 | 5. Storage Integration | 0/TBD | Not started | - |
