@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Form & Webhook
 
-- [ ] **FORM-01**: Professional, clean contact form with name, email, subject, and message fields
-- [ ] **FORM-02**: Client-side validation (required fields, email format) with user feedback
-- [ ] **FORM-03**: Form POSTs JSON payload to n8n webhook endpoint
-- [ ] **FORM-04**: Success/error states displayed to user after submission
+- [x] **FORM-01**: Professional, clean contact form with name, email, subject, and message fields
+- [x] **FORM-02**: Client-side validation (required fields, email format) with user feedback
+- [x] **FORM-03**: Form POSTs JSON payload to n8n webhook endpoint
+- [x] **FORM-04**: Success/error states displayed to user after submission
 
 ### n8n Workflow Core
 
@@ -87,10 +87,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FORM-01 | Phase 1 | Pending |
-| FORM-02 | Phase 1 | Pending |
-| FORM-03 | Phase 1 | Pending |
-| FORM-04 | Phase 1 | Pending |
+| FORM-01 | Phase 1 | Complete |
+| FORM-02 | Phase 1 | Complete |
+| FORM-03 | Phase 1 | Complete |
+| FORM-04 | Phase 1 | Complete |
 | WKFL-01 | Phase 2 | Pending |
 | WKFL-02 | Phase 2 | Pending |
 | WKFL-03 | Phase 3 | Pending |
@@ -119,4 +119,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-08 after roadmap creation*
+*Last updated: 2026-02-08 after Phase 1 completion*
