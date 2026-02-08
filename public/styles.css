@@ -109,6 +109,11 @@ textarea {
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
+input::placeholder,
+textarea::placeholder {
+  color: transparent;
+}
+
 input:focus,
 textarea:focus {
   border-color: var(--color-border-focus);
