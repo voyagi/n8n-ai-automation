@@ -1,5 +1,12 @@
-// Update this URL after importing the workflow into n8n
-const WEBHOOK_URL = "http://localhost:5678/webhook/contact";
+// Configuration for webhook submission
+// - webhookUrl: n8n webhook URL (update after workflow import)
+// - webhookAuth: Must match n8n Header Auth credential
+// - timeout: Request timeout in milliseconds
+const CONFIG = {
+	webhookUrl: "http://localhost:5678/webhook/contact-form",
+	webhookAuth: "REPLACE_ME_WITH_YOUR_TOKEN",
+	timeout: 15000,
+};
 
 const form = document.getElementById("contact-form");
 const submitBtn = document.getElementById("submit-btn");
@@ -107,26 +114,53 @@ form.addEventListener("submit", async (e) => {
 			email: form.email.value.trim(),
 			subject: form.subject.value.trim(),
 			message: form.message.value.trim(),
-			timestamp: new Date().toISOString(),
 		};
 
-		const response = await fetch(WEBHOOK_URL, {
+		const response = await fetch(CONFIG.webhookUrl, {
 			method: "POST",
-			headers: { "Content-Type": "application/json" },
+			headers: {
+				"Content-Type": "application/json",
+				"X-Webhook-Auth": CONFIG.webhookAuth,
+			},
 			body: JSON.stringify(data),
+			signal: AbortSignal.timeout(CONFIG.timeout),
 		});
 
 		if (!response.ok) {
-			throw new Error(`Server responded with ${response.status}`);
+			const errorData = await response.json().catch(() => ({}));
+			throw new Error(
+				errorData.message || `Server responded with ${response.status}`,
+			);
 		}
 
-		// Success: hide form, show success card
+		// Success: parse response and populate results card
+		const result = await response.json();
+
+		// Populate AI analysis results
+		document.getElementById("result-category").textContent =
+			result.category || "Processing";
+		document.getElementById("result-response-time").textContent =
+			result.estimatedResponse || "We'll be in touch soon";
+
+		// Hide form, show success card
 		form.classList.add("hidden");
 		errorBanner.classList.add("hidden");
 		successCard.classList.remove("hidden");
 	} catch (err) {
-		// Error: show banner, keep form visible and filled
-		errorBanner.textContent = `Failed to send: ${err.message}. Please check that n8n is running and try again.`;
+		// Differentiated error handling
+		let errorMessage;
+
+		if (err.name === "TimeoutError") {
+			errorMessage =
+				"The request took too long. The server may be busy — please try again.";
+		} else if (err.message && err.message.includes("Failed to fetch")) {
+			errorMessage =
+				"Could not reach the server. Please check that n8n is running and try again.";
+		} else {
+			errorMessage = err.message || "Something went wrong. Please try again.";
+		}
+
+		errorBanner.textContent = errorMessage;
 		errorBanner.classList.remove("hidden");
 	} finally {
 		// Re-enable fields and reset button
@@ -145,6 +179,10 @@ sendAnother.addEventListener("click", (e) => {
 	successCard.classList.add("hidden");
 	form.classList.remove("hidden");
 	form.reset();
+
+	// Reset result values
+	document.getElementById("result-category").textContent = "—";
+	document.getElementById("result-response-time").textContent = "—";
 
 	// Clear all validation states
 	fields.forEach((field) => {
