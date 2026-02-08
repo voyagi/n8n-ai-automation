@@ -10,31 +10,31 @@ See: .planning/PROJECT.md (updated 2026-02-08)
 ## Current Position
 
 Phase: 2 of 8 (Webhook Integration)
-Plan: 1 of TBD in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-08 — Completed 02-01-PLAN.md
+Last activity: 2026-02-08 — Completed 02-02-PLAN.md
 
-Progress: [███░░░░░░░] 17%
+Progress: [███░░░░░░░] 21%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 4
-- Average duration: 4.8 min
-- Total execution time: 0.32 hours
+- Total plans completed: 5
+- Average duration: 4.6 min
+- Total execution time: 0.38 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01 | 3 | 16 min | 5.3 min |
-| 02 | 1 | 3 min | 3.0 min |
+| 02 | 2 | 7 min | 3.5 min |
 
 **Recent Trend:**
 
-- Last 5 plans: 5 min, 8 min, 3 min
-- Trend: Stable (faster n8n JSON creation vs form implementation)
+- Last 5 plans: 5 min, 8 min, 3 min, 4 min
+- Trend: Stable (efficient frontend refactoring)
 
 *Updated after each plan completion*
 
@@ -57,6 +57,9 @@ Recent decisions affecting current work:
 - Header Auth over Basic Auth for webhook security (more flexible, easier rotation) (02-01)
 - Webhook response mode "When Last Node Finishes" for synchronous AI processing (02-01)
 - Field paths use $json.body.* structure with note for testing adjustment if needed (02-01)
+- Remove client-side timestamp from payload - n8n Set node adds submittedAt server-side (02-02)
+- Use AbortSignal.timeout() for 15-second timeout (native browser API vs manual AbortController) (02-02)
+- Change success heading to "Message received!" - more accurate than "sent" (reflects processing) (02-02)
 
 ### Pending Todos
 
@@ -68,6 +71,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-08T15:28:21Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-02-08T15:30:24Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
