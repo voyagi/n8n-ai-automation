@@ -16,8 +16,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### n8n Workflow Core
 
-- [ ] **WKFL-01**: Webhook trigger node receives POST from contact form
-- [ ] **WKFL-02**: Set node extracts and normalizes form fields for downstream processing
+- [x] **WKFL-01**: Webhook trigger node receives POST from contact form
+- [x] **WKFL-02**: Set node extracts and normalizes form fields for downstream processing
 - [ ] **WKFL-03**: OpenAI node classifies inquiry type (support / sales / feedback / spam)
 - [ ] **WKFL-04**: OpenAI node generates one-line message summary
 - [ ] **WKFL-05**: OpenAI node drafts a suggested response to the inquiry
@@ -91,8 +91,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FORM-02 | Phase 1 | Complete |
 | FORM-03 | Phase 1 | Complete |
 | FORM-04 | Phase 1 | Complete |
-| WKFL-01 | Phase 2 | Pending |
-| WKFL-02 | Phase 2 | Pending |
+| WKFL-01 | Phase 2 | Complete |
+| WKFL-02 | Phase 2 | Complete |
 | WKFL-03 | Phase 3 | Pending |
 | WKFL-04 | Phase 3 | Pending |
 | WKFL-05 | Phase 3 | Pending |
@@ -119,4 +119,4 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-08 after Phase 1 completion*
+*Last updated: 2026-02-08 after Phase 2 completion*

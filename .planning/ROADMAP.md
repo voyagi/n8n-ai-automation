@@ -13,7 +13,7 @@ This roadmap transforms a basic contact form into a complete AI-powered automati
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation & Form Polish** - Complete the UI and establish n8n infrastructure
-- [ ] **Phase 2: Webhook Integration** - Connect form to n8n workflow
+- [x] **Phase 2: Webhook Integration** - Connect form to n8n workflow
 - [ ] **Phase 3: AI Processing Core** - Build OpenAI classification and analysis
 - [ ] **Phase 4: Conditional Routing** - Add spam detection and branching logic
 - [ ] **Phase 5: Storage Integration** - Implement Google Sheets logging
@@ -54,9 +54,9 @@ Plans:
 
 Plans:
 
-- [ ] 02-01-PLAN.md -- Create n8n workflow JSON (webhook + Set + IF validation + mock response) and update .env.example
-- [ ] 02-02-PLAN.md -- Refactor script.js with CONFIG, auth header, timeout, error handling; update success card for AI results
-- [ ] 02-03-PLAN.md -- End-to-end verification: import workflow, test form submission round-trip
+- [x] 02-01-PLAN.md -- Create n8n workflow JSON (webhook + Set + IF validation + mock response) and update .env.example
+- [x] 02-02-PLAN.md -- Refactor script.js with CONFIG, auth header, timeout, error handling; update success card for AI results
+- [x] 02-03-PLAN.md -- End-to-end verification: import workflow, test form submission round-trip
 
 ### Phase 3: AI Processing Core
 **Goal**: OpenAI analyzes submissions and provides classification, summary, and draft response
@@ -156,7 +156,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Form Polish | 3/3 | Complete | 2026-02-08 |
-| 2. Webhook Integration | 0/3 | Planned | - |
+| 2. Webhook Integration | 3/3 | Complete | 2026-02-08 |
 | 3. AI Processing Core | 0/TBD | Not started | - |
 | 4. Conditional Routing | 0/TBD | Not started | - |
 | 5. Storage Integration | 0/TBD | Not started | - |
