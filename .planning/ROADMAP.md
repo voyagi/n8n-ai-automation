@@ -117,10 +117,11 @@ Plans:
   3. Slack notification displays AI analysis (category, summary, draft reply)
   4. Legitimate submission sends email notification with AI analysis
   5. Spam submission skips all notifications (no Slack, no email)
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD
+
+- [ ] 06-01-PLAN.md -- Add Slack and Email notification nodes with Block Kit formatting, HTML templates, and credential verification
 
 ### Phase 7: Error Handling & Testing
 **Goal**: Workflow handles failures gracefully and performs reliably under varied conditions
