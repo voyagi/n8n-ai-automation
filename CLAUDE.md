@@ -101,6 +101,18 @@ For the Upwork portfolio:
 4. Screenshot the Google Sheet with processed entries
 5. Export a clean workflow JSON that clients could import
 
+## Browser Testing
+
+For any task that requires visual verification, clicking, typing, form
+testing, or seeing a rendered page: use the dev-browser skill in
+`.claude/skills/dev-browser/`. Read its `SKILL.md` for the API.
+
+- ALWAYS use extension mode (`npm run start-extension`) — connects to the
+  user's Chrome, no separate window
+- NEVER install Playwright MCP or write raw Playwright scripts
+- Use `client.page()`, `client.getAISnapshot()`, `page.screenshot()`
+- If the skill isn't deployed yet, copy from `~/.claude/skill-library/dev-browser/`
+
 ## Commands
 
 ```bash
