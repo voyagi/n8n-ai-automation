@@ -293,46 +293,22 @@
     },
     {
       "parameters": {
-        "mode": "manual",
-        "duplicateItem": false,
-        "assignments": {
-          "assignments": [
-            {
-              "id": "is-spam-flag",
-              "name": "is_spam",
-              "value": true,
-              "type": "boolean"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "return $input.all().map(item => ({\n  json: { ...item.json, is_spam: true }\n}));"
       },
       "id": "flag-as-spam",
       "name": "Flag as Spam",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [1630, 480]
     },
     {
       "parameters": {
-        "mode": "manual",
-        "duplicateItem": false,
-        "assignments": {
-          "assignments": [
-            {
-              "id": "is-legitimate-flag",
-              "name": "is_spam",
-              "value": false,
-              "type": "boolean"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "return $input.all().map(item => ({\n  json: { ...item.json, is_spam: false }\n}));"
       },
       "id": "flag-as-legitimate",
       "name": "Flag as Legitimate",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [1630, 300]
     },
     {
@@ -340,13 +316,13 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "YOUR_SHEET_ID_HERE",
+          "value": "1wE6VxbEkzXbQ3zHH8-sNy8L3TfyKtDi5DVisGrNcSdY",
           "mode": "id"
         },
         "sheetName": {
           "__rl": true,
           "value": "Sheet1",
-          "mode": "list"
+          "mode": "name"
         },
         "columns": {
           "mappingMode": "defineBelow",

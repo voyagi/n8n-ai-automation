@@ -110,8 +110,12 @@ testing, or seeing a rendered page: use the dev-browser skill in
 - ALWAYS use extension mode (`npm run start-extension`) — connects to the
   user's Chrome, no separate window
 - NEVER install Playwright MCP or write raw Playwright scripts
-- Use `client.page()`, `client.getAISnapshot()`, `page.screenshot()`
-- If the skill isn't deployed yet, copy from `~/.claude/skill-library/dev-browser/`
+- Use `cdpScreenshot()` for screenshots (never `page.screenshot()`)
+- Use `getIframeContent()` / `evaluateInIframe()` for cross-origin iframes
+- If the skill isn't deployed yet, copy from
+  `/c/Users/Eagi/.claude/skill-library/dev-browser/`
+- **Never use `~` in bash paths** — MSYS expands to `/home/Eagi` not
+  `/c/Users/Eagi`
 
 ## Commands
 
