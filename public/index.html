@@ -71,6 +71,36 @@
 			<a href="#" id="send-another" class="send-another">Send another message</a>
 		</div>
 
+		<div id="spam-detected" class="spam-message hidden">
+			<div class="spam-icon">
+				<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					<path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+					<line x1="12" y1="12" x2="12" y2="17" stroke="currentColor" stroke-width="2"/>
+					<circle cx="12" cy="9" r="1.5" fill="currentColor"/>
+				</svg>
+			</div>
+			<h2>Spam Detection Alert</h2>
+			<p>Our AI system flagged this submission as potential spam. This helps us filter unsolicited messages and protect our inbox.</p>
+			<div class="spam-details">
+				<div class="detail-row">
+					<span class="detail-label">Spam Score</span>
+					<span class="detail-value" id="spam-score">—</span>
+				</div>
+				<div class="detail-row">
+					<span class="detail-label">Reason</span>
+					<span class="detail-value" id="spam-reason">—</span>
+				</div>
+				<div class="detail-row">
+					<span class="detail-label">Category</span>
+					<span class="detail-value" id="spam-category">—</span>
+				</div>
+			</div>
+			<p class="spam-note">Note: This is an automated detection. If you believe this is incorrect, please reach out through alternative channels.</p>
+			<a href="#" id="spam-send-another" class="send-another">Try another message</a>
+		</div>
+
 		<footer>
 			<p>Powered by n8n + OpenAI — <a href="https://github.com/voyagi/upwork-n8n-automation">View source</a></p>
 		</footer>

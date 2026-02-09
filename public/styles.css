@@ -15,6 +15,10 @@
   --color-error: #ef4444;
   --color-error-bg: #fef2f2;
   --color-error-border: #fecaca;
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fffbeb;
+  --color-warning-border: #fde68a;
+  --color-warning-text: #92400e;
   --radius: 10px;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
@@ -338,6 +342,85 @@ footer {
 footer a {
   color: var(--color-accent);
   text-decoration: none;
+}
+
+.spam-message {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.spam-message:not(.hidden) {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.spam-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto;
+  color: var(--color-warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spam-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.spam-message h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-warning-text);
+  margin: 1.5rem 0 0.5rem;
+}
+
+.spam-message p {
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+}
+
+.spam-details {
+  background: var(--color-warning-bg);
+  border: 1px solid var(--color-warning-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  gap: 1rem;
+}
+
+.detail-row + .detail-row {
+  border-top: 1px solid var(--color-warning-border);
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  color: var(--color-warning-text);
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.detail-value {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  font-weight: 600;
+  text-align: right;
+}
+
+.spam-note {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 500px) {

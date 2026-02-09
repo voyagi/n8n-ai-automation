@@ -12,7 +12,9 @@ const form = document.getElementById("contact-form");
 const submitBtn = document.getElementById("submit-btn");
 const errorBanner = document.getElementById("error-banner");
 const successCard = document.getElementById("success-card");
+const spamDetected = document.getElementById("spam-detected");
 const sendAnother = document.getElementById("send-another");
+const spamSendAnother = document.getElementById("spam-send-another");
 const fields = form.querySelectorAll("input, textarea");
 
 // Track which fields have been blurred (for "punish late" UX)
@@ -136,16 +138,33 @@ form.addEventListener("submit", async (e) => {
 		// Success: parse response and populate results card
 		const result = await response.json();
 
-		// Populate AI analysis results
-		document.getElementById("result-category").textContent =
-			result.category || "Processing";
-		document.getElementById("result-summary").textContent =
-			result.summary || "Your message is being processed";
+		// Check if submission was flagged as spam
+		if (result.spam === true) {
+			// Populate spam detection details
+			document.getElementById("spam-score").textContent = result.spam_score || "—";
+			document.getElementById("spam-reason").textContent =
+				result.spam_reason || "No reason provided";
+			document.getElementById("spam-category").textContent =
+				result.category || "—";
 
-		// Hide form, show success card
-		form.classList.add("hidden");
-		errorBanner.classList.add("hidden");
-		successCard.classList.remove("hidden");
+			// Hide form, show spam detection message
+			form.classList.add("hidden");
+			errorBanner.classList.add("hidden");
+			successCard.classList.add("hidden");
+			spamDetected.classList.remove("hidden");
+		} else {
+			// Populate AI analysis results for legitimate submissions
+			document.getElementById("result-category").textContent =
+				result.category || "Processing";
+			document.getElementById("result-summary").textContent =
+				result.summary || "Your message is being processed";
+
+			// Hide form, show success card
+			form.classList.add("hidden");
+			errorBanner.classList.add("hidden");
+			spamDetected.classList.add("hidden");
+			successCard.classList.remove("hidden");
+		}
 	} catch (err) {
 		// Differentiated error handling
 		let errorMessage;
@@ -174,15 +193,20 @@ form.addEventListener("submit", async (e) => {
 });
 
 // "Send another" handler: reset form and clear validation states
-sendAnother.addEventListener("click", (e) => {
-	e.preventDefault();
+function resetForm() {
 	successCard.classList.add("hidden");
+	spamDetected.classList.add("hidden");
 	form.classList.remove("hidden");
 	form.reset();
 
 	// Reset result values
 	document.getElementById("result-category").textContent = "—";
 	document.getElementById("result-summary").textContent = "—";
+
+	// Reset spam detection values
+	document.getElementById("spam-score").textContent = "—";
+	document.getElementById("spam-reason").textContent = "—";
+	document.getElementById("spam-category").textContent = "—";
 
 	// Clear all validation states
 	fields.forEach((field) => {
@@ -193,4 +217,14 @@ sendAnother.addEventListener("click", (e) => {
 		);
 		if (errorSpan) errorSpan.textContent = "";
 	});
+}
+
+sendAnother.addEventListener("click", (e) => {
+	e.preventDefault();
+	resetForm();
+});
+
+spamSendAnother.addEventListener("click", (e) => {
+	e.preventDefault();
+	resetForm();
 });
