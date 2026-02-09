@@ -14,7 +14,13 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [250, 300],
-      "webhookId": "contact-form-webhook"
+      "webhookId": "contact-form-webhook",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "header-auth-cred",
+          "name": "Webhook Header Auth"
+        }
+      }
     },
     {
       "parameters": {
@@ -62,8 +68,7 @@
       "name": "Normalize Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [480, 300],
-      "notes": "Note: Field paths use $json.body.* assuming JSON POST. If testing reveals fields are at $json.* directly, adjust expressions accordingly."
+      "position": [480, 300]
     },
     {
       "parameters": {
@@ -184,33 +189,97 @@
       "name": "Success Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
+      "position": [1630, 300]
+    },
+    {
+      "parameters": {
+        "mode": "rules",
+        "rules": {
+          "rules": [
+            {
+              "id": "spam-rule",
+              "conditions": {
+                "conditions": [
+                  {
+                    "id": "spam-score-condition",
+                    "leftValue": "={{ $json.spam_score }}",
+                    "rightValue": 70,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "spam"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "route-spam",
+      "name": "Route by Spam Score",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
       "position": [1400, 300]
     },
     {
       "parameters": {
-        "operation": "message",
-        "model": "gpt-4o",
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ spam: true, message: 'Submission flagged as spam', category: $json.category, spam_score: $json.spam_score, spam_reason: $json.spam_reason }) }}",
         "options": {
-          "temperature": 0.2,
-          "maxTokens": 800,
-          "systemMessage": "You are a contact form analyzer for a business website. Analyze the submitted message and return a JSON object.\n\nCLASSIFICATION CATEGORIES (pick exactly one):\n- support: Technical issues, bugs, how-to questions, troubleshooting\n- sales: Pricing inquiries, demo requests, partnerships, purchasing\n- feedback: Product suggestions, compliments, complaints, reviews\n- general_inquiry: Ambiguous questions, company info requests, other\n- spam: Obvious spam (gibberish, link farms) or unsolicited marketing (SEO pitches, \"boost your traffic\" offers)\n\nINSTRUCTIONS:\n1. Classify into ONE category from the list above\n2. Provide your confidence in the classification (0-100)\n3. Write a one-line summary of the message (under 100 characters)\n4. Calculate a spam confidence score (0-100) with a brief reason\n5. If spam_score <= 80, draft a professional, warm response (4-6 sentences) that:\n   - Acknowledges the sender by name\n   - Echoes back specific details from their message\n   - Suggests appropriate next steps\n   - Matches category tone: sales=enthusiastic, support=empathetic, feedback=grateful, general_inquiry=helpful\n6. If spam_score > 80, set draft_response to an empty string\n\nReturn ONLY valid JSON in this EXACT structure (no extra fields, no markdown):\n{\n  \"category\": \"one_of_the_5_categories\",\n  \"category_confidence\": 85,\n  \"summary\": \"One-line summary under 100 chars\",\n  \"spam_score\": 15,\n  \"spam_reason\": \"Brief explanation of spam assessment\",\n  \"draft_response\": \"The drafted response OR empty string if spam > 80\"\n}"
+          "responseCode": 200
+        }
+      },
+      "id": "spam-respond",
+      "name": "Spam Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1630, 480]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
         },
-        "text": "Analyze this contact form submission:\n\nName: {{ $json.name }}\nEmail: {{ $json.email }}\nSubject: {{ $json.subject }}\nMessage: {{ $json.message }}",
-        "jsonOutput": true
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.2, max_tokens: 800, response_format: { type: 'json_object' }, messages: [ { role: 'system', content: 'You are a contact form analyzer for a business website. Analyze the submitted message and return a JSON object.\\n\\nCLASSIFICATION CATEGORIES (pick exactly one):\\n- support: Technical issues, bugs, how-to questions, troubleshooting\\n- sales: Pricing inquiries, demo requests, partnerships, purchasing\\n- feedback: Product suggestions, compliments, complaints, reviews\\n- general_inquiry: Ambiguous questions, company info requests, other\\n- spam: Obvious spam (gibberish, link farms) or unsolicited marketing (SEO pitches, \\\"boost your traffic\\\" offers)\\n\\nINSTRUCTIONS:\\n1. Classify into ONE category from the list above\\n2. Provide your confidence in the classification (0-100)\\n3. Write a one-line summary of the message (under 100 characters)\\n4. Calculate a spam confidence score (0-100) with a brief reason\\n5. If spam_score <= 80, draft a professional, warm response (4-6 sentences) that acknowledges the sender by name, echoes back specific details from their message, suggests appropriate next steps, and matches category tone: sales=enthusiastic, support=empathetic, feedback=grateful, general_inquiry=helpful\\n6. If spam_score > 80, set draft_response to an empty string\\n\\nReturn ONLY valid JSON in this EXACT structure (no extra fields, no markdown):\\n{\\n  \\\"category\\\": \\\"one_of_the_5_categories\\\",\\n  \\\"category_confidence\\\": 85,\\n  \\\"summary\\\": \\\"One-line summary under 100 chars\\\",\\n  \\\"spam_score\\\": 15,\\n  \\\"spam_reason\\\": \\\"Brief explanation of spam assessment\\\",\\n  \\\"draft_response\\\": \\\"The drafted response OR empty string if spam > 80\\\"\\n}' }, { role: 'user', content: 'Analyze this contact form submission:\\n\\nName: ' + $json.name + '\\nEmail: ' + $json.email + '\\nSubject: ' + $json.subject + '\\nMessage: ' + $json.message } ] }) }}",
+        "options": {
+          "timeout": 30000
+        }
       },
       "id": "analyze-contact-form",
       "name": "Analyze Contact Form",
-      "type": "@n8n/n8n-nodes-langchain.openai",
-      "typeVersion": 1.8,
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
       "position": [940, 300],
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 2000,
-      "continueOnFail": false
+      "credentials": {
+        "openAiApi": {
+          "id": "openai-api-cred",
+          "name": "OpenAI API"
+        }
+      }
     },
     {
       "parameters": {
-        "jsCode": "const rawOutput = $input.first().json.message.content;\n\nlet parsed;\ntry {\n  parsed = JSON.parse(rawOutput);\n} catch (e) {\n  return [{\n    json: {\n      category: 'general_inquiry',\n      category_confidence: 0,\n      summary: 'Unable to process submission',\n      spam_score: 0,\n      spam_reason: 'Processing error - could not parse AI response',\n      draft_response: '',\n      parse_error: true,\n      name: $('Normalize Fields').first().json.name,\n      email: $('Normalize Fields').first().json.email,\n      subject: $('Normalize Fields').first().json.subject,\n      message: $('Normalize Fields').first().json.message,\n      submittedAt: $('Normalize Fields').first().json.submittedAt\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    category: parsed.category || 'general_inquiry',\n    category_confidence: Number(parsed.category_confidence) || 50,\n    summary: (parsed.summary || 'No summary available').substring(0, 100),\n    spam_score: Number(parsed.spam_score) || 0,\n    spam_reason: parsed.spam_reason || 'No spam indicators detected',\n    draft_response: parsed.draft_response || '',\n    name: $('Normalize Fields').first().json.name,\n    email: $('Normalize Fields').first().json.email,\n    subject: $('Normalize Fields').first().json.subject,\n    message: $('Normalize Fields').first().json.message,\n    submittedAt: $('Normalize Fields').first().json.submittedAt\n  }\n}];"
+        "jsCode": "const apiResponse = $input.first().json;\nconst rawContent = apiResponse.choices?.[0]?.message?.content || '';\n\nlet parsed;\ntry {\n  parsed = JSON.parse(rawContent);\n} catch (e) {\n  return [{\n    json: {\n      category: 'general_inquiry',\n      category_confidence: 0,\n      summary: 'Unable to process submission',\n      spam_score: 0,\n      spam_reason: 'Processing error - could not parse AI response',\n      draft_response: '',\n      parse_error: true,\n      name: $('Normalize Fields').first().json.name,\n      email: $('Normalize Fields').first().json.email,\n      subject: $('Normalize Fields').first().json.subject,\n      message: $('Normalize Fields').first().json.message,\n      submittedAt: $('Normalize Fields').first().json.submittedAt\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    category: parsed.category || 'general_inquiry',\n    category_confidence: Number(parsed.category_confidence) || 50,\n    summary: (parsed.summary || 'No summary available').substring(0, 100),\n    spam_score: Number(parsed.spam_score) || 0,\n    spam_reason: parsed.spam_reason || 'No spam indicators detected',\n    draft_response: parsed.draft_response || '',\n    name: $('Normalize Fields').first().json.name,\n    email: $('Normalize Fields').first().json.email,\n    subject: $('Normalize Fields').first().json.subject,\n    message: $('Normalize Fields').first().json.message,\n    submittedAt: $('Normalize Fields').first().json.submittedAt\n  }\n}];"
       },
       "id": "parse-ai-response",
       "name": "Parse AI Response",
@@ -275,6 +344,24 @@
       "main": [
         [
           {
+            "node": "Route by Spam Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route by Spam Score": {
+      "main": [
+        [
+          {
+            "node": "Spam Response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
             "node": "Success Response",
             "type": "main",
             "index": 0
@@ -304,7 +391,7 @@
   "updatedAt": "2026-02-08T00:00:00.000Z",
   "versionId": "1",
   "meta": {
-    "templateCredsSetupCompleted": false,
+    "templateCredsSetupCompleted": true,
     "instanceId": "demo-instance"
   },
   "id": "contact-form-ai-workflow",
