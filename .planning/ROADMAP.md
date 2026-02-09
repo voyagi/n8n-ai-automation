@@ -101,10 +101,11 @@ Plans:
   3. Each row includes AI analysis (category, sentiment, summary, draft reply, spam score)
   4. Spam submissions clearly flagged in dedicated column
   5. Test submission appears in Google Sheet within 5 seconds of form submission
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD
+
+- [ ] 05-01-PLAN.md -- Add Set nodes for spam flagging, Google Sheets append node, rewire connections, and end-to-end verification
 
 ### Phase 6: Notification System
 **Goal**: Legitimate submissions trigger formatted Slack and email notifications
