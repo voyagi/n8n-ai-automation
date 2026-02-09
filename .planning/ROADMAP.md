@@ -85,10 +85,11 @@ Plans:
   2. Switch node routes legitimate submissions (<70% spam confidence) to processing branch
   3. Test spam submission triggers spam branch (visible in execution path)
   4. Test legitimate submission triggers processing branch (visible in execution path)
-**Plans**: TBD
+**Plans:** 1 plan
 
 Plans:
-- [ ] TBD
+
+- [ ] 04-01-PLAN.md -- Add Switch node for spam routing, Spam Response node, frontend spam detection UI, and end-to-end verification
 
 ### Phase 5: Storage Integration
 **Goal**: All submissions logged to Google Sheets with AI analysis results
