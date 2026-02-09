@@ -60,9 +60,7 @@
             }
           ]
         },
-        "options": {
-          "keepOnlySet": true
-        }
+        "options": {}
       },
       "id": "normalize-fields",
       "name": "Normalize Fields",
@@ -195,10 +193,15 @@
       "parameters": {
         "mode": "rules",
         "rules": {
-          "rules": [
+          "values": [
             {
               "id": "spam-rule",
               "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
                 "conditions": [
                   {
                     "id": "spam-score-condition",
@@ -209,7 +212,8 @@
                       "operation": "gt"
                     }
                   }
-                ]
+                ],
+                "combinator": "and"
               },
               "renameOutput": true,
               "outputKey": "spam"

@@ -139,7 +139,9 @@ form.addEventListener("submit", async (e) => {
 		const result = await response.json();
 
 		// Check if submission was flagged as spam
-		if (result.spam === true) {
+		// Supports both explicit spam flag (Spam Response node) and score-based detection
+		const isSpam = result.spam === true || (result.spam_score && result.spam_score > 70);
+		if (isSpam) {
 			// Populate spam detection details
 			document.getElementById("spam-score").textContent = result.spam_score || "—";
 			document.getElementById("spam-reason").textContent =
