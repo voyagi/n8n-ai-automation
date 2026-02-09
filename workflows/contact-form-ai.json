@@ -187,7 +187,7 @@
       "name": "Success Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1630, 300]
+      "position": [2090, 300]
     },
     {
       "parameters": {
@@ -242,7 +242,7 @@
       "name": "Spam Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1630, 480]
+      "position": [2090, 480]
     },
     {
       "parameters": {
@@ -290,6 +290,96 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [1170, 300]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "is-spam-flag",
+              "name": "is_spam",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "flag-as-spam",
+      "name": "Flag as Spam",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1630, 480]
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "is-legitimate-flag",
+              "name": "is_spam",
+              "value": false,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "flag-as-legitimate",
+      "name": "Flag as Legitimate",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1630, 300]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_SHEET_ID_HERE",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Sheet1",
+          "mode": "list"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Submitted At": "={{ $json.submittedAt }}",
+            "Name": "={{ $json.name }}",
+            "Email": "={{ $json.email }}",
+            "Subject": "={{ $json.subject }}",
+            "Message": "={{ $json.message }}",
+            "Category": "={{ $json.category }}",
+            "Summary": "={{ $json.summary }}",
+            "Spam Score": "={{ $json.spam_score }}",
+            "Spam Reason": "={{ $json.spam_reason }}",
+            "Draft Response": "={{ $json.draft_response }}",
+            "Is Spam": "={{ $json.is_spam }}"
+          }
+        },
+        "options": {
+          "cellFormat": "USER_ENTERED",
+          "useAppend": true
+        }
+      },
+      "id": "log-to-sheets",
+      "name": "Log to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [1860, 390],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "google-oauth-cred",
+          "name": "Google OAuth2"
+        }
+      }
     }
   ],
   "connections": {
@@ -359,12 +449,44 @@
       "main": [
         [
           {
-            "node": "Spam Response",
+            "node": "Flag as Spam",
             "type": "main",
             "index": 0
           }
         ],
         [
+          {
+            "node": "Flag as Legitimate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flag as Spam": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Spam Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flag as Legitimate": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
+            "type": "main",
+            "index": 0
+          },
           {
             "node": "Success Response",
             "type": "main",
