@@ -151,10 +151,13 @@ Plans:
   4. Test dataset (10 realistic submissions) demonstrates varied handling
   5. Before/after comparison document quantifies manual vs automated process
   6. README contains complete setup instructions with credential configuration
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] TBD
+
+- [ ] 08-01-PLAN.md -- Add sticky notes to workflow JSON, clean export, enhance workflows/README.md credential docs
+- [ ] 08-02-PLAN.md -- Create architecture diagram (Mermaid) and before/after comparison with quantified ROI
+- [ ] 08-03-PLAN.md -- Create portfolio-oriented root README and verify test dataset completeness
 
 ## Progress
 
@@ -170,4 +173,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 5. Storage Integration | 1/1 | Complete | 2026-02-09 |
 | 6. Notification System | 1/1 | Complete | 2026-02-09 |
 | 7. Error Handling & Testing | 2/2 | Complete | 2026-02-10 |
-| 8. Documentation & Portfolio | 0/TBD | Not started | - |
+| 8. Documentation & Portfolio | 0/3 | Not started | - |
