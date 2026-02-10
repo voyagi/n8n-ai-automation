@@ -274,6 +274,7 @@
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 2000,
+      "continueOnFail": true,
       "credentials": {
         "openAiApi": {
           "id": "openai-api-cred",
@@ -293,7 +294,17 @@
     },
     {
       "parameters": {
-        "jsCode": "return $input.all().map(item => ({\n  json: { ...item.json, is_spam: true }\n}));"
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const json = item.json;\n\n  // Detect if AI analysis failed or returned incomplete data\n  // continueOnFail passes error object, parse errors set parse_error flag\n  const aiMissing = !json.category ||\n                    json.category === '' ||\n                    json.parse_error === true ||\n                    json.error !== undefined;\n\n  if (aiMissing) {\n    return {\n      json: {\n        // Preserve original form data\n        name: json.name || '',\n        email: json.email || '',\n        subject: json.subject || '',\n        message: json.message || '',\n        submittedAt: json.submittedAt || '',\n\n        // Default AI values for graceful degradation\n        category: 'general_inquiry',\n        category_confidence: 0,\n        summary: 'Unable to process - AI analysis unavailable',\n        spam_score: 0,\n        spam_reason: 'AI analysis failed - defaulting to non-spam',\n        draft_response: '',\n\n        // Flag for downstream warnings tracking\n        ai_failed: true\n      }\n    };\n  }\n\n  // AI processing succeeded — add ai_failed: false for consistent field shape\n  return { json: { ...json, ai_failed: false } };\n});"
+      },
+      "id": "ai-fallback-handler",
+      "name": "AI Fallback Handler",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1290, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => ({\n  json: { ...item.json, is_spam: true, warnings: 'None' }\n}));"
       },
       "id": "flag-as-spam",
       "name": "Flag as Spam",
@@ -350,6 +361,10 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
       "position": [1860, 390],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "continueOnFail": true,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "google-oauth-cred",
@@ -535,6 +550,17 @@
       ]
     },
     "Parse AI Response": {
+      "main": [
+        [
+          {
+            "node": "AI Fallback Handler",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Fallback Handler": {
       "main": [
         [
           {
