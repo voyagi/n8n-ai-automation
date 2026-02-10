@@ -348,7 +348,8 @@
             "Spam Score": "={{ $json.spam_score }}",
             "Spam Reason": "={{ $json.spam_reason }}",
             "Draft Response": "={{ $json.draft_response }}",
-            "Is Spam": "={{ $json.is_spam }}"
+            "Is Spam": "={{ $json.is_spam }}",
+            "Warnings": "={{ $json.warnings }}"
           }
         },
         "options": {
@@ -360,7 +361,7 @@
       "name": "Log to Google Sheets",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [1860, 390],
+      "position": [2320, 200],
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 2000,
@@ -495,6 +496,16 @@
           "name": "SMTP Account"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Convergence point: receives input from both Slack and Email notification nodes.\n// Takes the first item (both carry same form data) and checks all upstream outcomes.\nconst item = $input.first().json;\nconst warnings = [];\n\n// Check if AI analysis was unavailable\nif (item.ai_failed) {\n  warnings.push('AI analysis unavailable');\n}\n\n// Check if Slack notification failed\ntry {\n  const slackData = $('Send Slack Notification').all();\n  if (slackData.length === 0 || slackData[0].json.error) {\n    warnings.push('Slack notification failed');\n  }\n} catch (e) {\n  warnings.push('Slack notification failed');\n}\n\n// Check if Email notification failed\ntry {\n  const emailData = $('Send Email Notification').all();\n  if (emailData.length === 0 || emailData[0].json.error) {\n    warnings.push('Email notification failed');\n  }\n} catch (e) {\n  warnings.push('Email notification failed');\n}\n\nreturn [{\n  json: {\n    ...item,\n    warnings: warnings.length > 0 ? warnings.join(', ') : 'None'\n  }\n}];"
+      },
+      "id": "build-warnings",
+      "name": "Build Warnings",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2090, 100]
     }
   ],
   "connections": {
@@ -609,11 +620,6 @@
       "main": [
         [
           {
-            "node": "Log to Google Sheets",
-            "type": "main",
-            "index": 0
-          },
-          {
             "node": "Success Response",
             "type": "main",
             "index": 0
@@ -625,6 +631,39 @@
           },
           {
             "node": "Send Email Notification",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Slack Notification": {
+      "main": [
+        [
+          {
+            "node": "Build Warnings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Notification": {
+      "main": [
+        [
+          {
+            "node": "Build Warnings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Warnings": {
+      "main": [
+        [
+          {
+            "node": "Log to Google Sheets",
             "type": "main",
             "index": 0
           }
