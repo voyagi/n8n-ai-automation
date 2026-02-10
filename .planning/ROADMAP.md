@@ -133,10 +133,12 @@ Plans:
   3. Test dataset (10+ realistic submissions) processes successfully with varied inputs
   4. Rapid submissions (5+ in 30 seconds) complete without failures
   5. Invalid API credentials produce clear error messages (not silent failures)
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD
+
+- [ ] 07-01-PLAN.md -- Add per-node error handling, AI Fallback Handler, Build Warnings node, and Warnings column
+- [ ] 07-02-PLAN.md -- Create test dataset (13 entries), batch submission script, and verify error handling
 
 ### Phase 8: Documentation & Portfolio
 **Goal**: Portfolio-ready package with exportable workflow, documentation, and demo materials
