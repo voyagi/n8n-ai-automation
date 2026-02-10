@@ -13,7 +13,10 @@
       "name": "Webhook",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
-      "position": [250, 300],
+      "position": [
+        250,
+        300
+      ],
       "webhookId": "contact-form-webhook",
       "credentials": {
         "httpHeaderAuth": {
@@ -66,7 +69,10 @@
       "name": "Normalize Fields",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [480, 300]
+      "position": [
+        480,
+        300
+      ]
     },
     {
       "parameters": {
@@ -131,7 +137,10 @@
       "name": "Validate Fields",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [710, 300]
+      "position": [
+        710,
+        300
+      ]
     },
     {
       "parameters": {
@@ -159,7 +168,10 @@
       "name": "Error Response",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [940, 480]
+      "position": [
+        940,
+        480
+      ]
     },
     {
       "parameters": {
@@ -173,7 +185,10 @@
       "name": "Validation Error",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [1400, 480]
+      "position": [
+        1400,
+        480
+      ]
     },
     {
       "parameters": {
@@ -187,7 +202,10 @@
       "name": "Success Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [2090, 300]
+      "position": [
+        2090,
+        300
+      ]
     },
     {
       "parameters": {
@@ -228,7 +246,10 @@
       "name": "Route by Spam Score",
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
-      "position": [1400, 300]
+      "position": [
+        1400,
+        300
+      ]
     },
     {
       "parameters": {
@@ -242,7 +263,10 @@
       "name": "Spam Response",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
-      "position": [2090, 480]
+      "position": [
+        2090,
+        480
+      ]
     },
     {
       "parameters": {
@@ -270,7 +294,10 @@
       "name": "Analyze Contact Form",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [940, 300],
+      "position": [
+        940,
+        300
+      ],
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 2000,
@@ -290,7 +317,10 @@
       "name": "Parse AI Response",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1170, 300]
+      "position": [
+        1170,
+        300
+      ]
     },
     {
       "parameters": {
@@ -300,7 +330,10 @@
       "name": "AI Fallback Handler",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1290, 300]
+      "position": [
+        1290,
+        300
+      ]
     },
     {
       "parameters": {
@@ -310,7 +343,10 @@
       "name": "Flag as Spam",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1630, 480]
+      "position": [
+        1630,
+        480
+      ]
     },
     {
       "parameters": {
@@ -320,7 +356,10 @@
       "name": "Flag as Legitimate",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1630, 300]
+      "position": [
+        1630,
+        300
+      ]
     },
     {
       "parameters": {
@@ -361,7 +400,10 @@
       "name": "Log to Google Sheets",
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.5,
-      "position": [2320, 200],
+      "position": [
+        2320,
+        200
+      ],
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 2000,
@@ -458,7 +500,10 @@
       "name": "Send Slack Notification",
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.2,
-      "position": [1860, 200],
+      "position": [
+        1860,
+        200
+      ],
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 5000,
@@ -485,7 +530,10 @@
       "name": "Send Email Notification",
       "type": "n8n-nodes-base.emailSend",
       "typeVersion": 2.1,
-      "position": [1860, 580],
+      "position": [
+        1860,
+        580
+      ],
       "retryOnFail": true,
       "maxTries": 3,
       "waitBetweenTries": 5000,
@@ -505,7 +553,85 @@
       "name": "Build Warnings",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2090, 100]
+      "position": [
+        2090,
+        100
+      ]
+    },
+    {
+      "id": "sticky-note-overview",
+      "name": "Sticky Note - Workflow Overview",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        80
+      ],
+      "parameters": {
+        "content": "## Contact Form AI Automation\n\nReceives form submissions via webhook, analyzes with OpenAI, routes spam vs legitimate, logs to Google Sheets, and sends Slack/email notifications.\n\n**Input:** POST with {name, email, subject, message}\n**Output:** AI analysis with category, summary, draft reply",
+        "width": 360,
+        "height": 200
+      }
+    },
+    {
+      "id": "sticky-note-input",
+      "name": "Sticky Note - Input & Validation",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        100
+      ],
+      "parameters": {
+        "content": "## Input Validation\n\nWebhook receives POST, Normalize Fields extracts fields, Validate Fields checks requirements.\n\n**Required:** name, email, message\n**Optional:** subject\n**Auth:** Header token (X-Webhook-Auth)",
+        "width": 320,
+        "height": 180
+      }
+    },
+    {
+      "id": "sticky-note-ai",
+      "name": "Sticky Note - AI Analysis",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        930,
+        80
+      ],
+      "parameters": {
+        "content": "## AI Processing\n\nOpenAI classifies the inquiry and generates:\n- **Category:** support / sales / feedback / spam\n- **Spam score:** 0-100%\n- **Summary:** One-line description\n- **Draft reply:** Suggested response\n\nIf OpenAI fails, fallback defaults are injected (category: general_inquiry, spam_score: 0).",
+        "width": 340,
+        "height": 200
+      }
+    },
+    {
+      "id": "sticky-note-routing",
+      "name": "Sticky Note - Spam Routing",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1390,
+        100
+      ],
+      "parameters": {
+        "content": "## Spam Detection\n\nSwitch routes by spam_score:\n- **> 70%** → Spam branch (flag, log, skip notifications)\n- **<= 70%** → Legitimate branch (log, notify, respond)",
+        "width": 320,
+        "height": 180
+      }
+    },
+    {
+      "id": "sticky-note-logging",
+      "name": "Sticky Note - Logging & Notifications",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1850,
+        -20
+      ],
+      "parameters": {
+        "content": "## Logging & Notifications\n\n**Google Sheets:** All submissions logged (spam flagged)\n**Slack:** Rich notification with color-coded category\n**Email:** HTML notification to configured recipient\n**Warnings:** Tracks partial failures (AI/Slack/Email down)\n\nNotification failures never block the form response.",
+        "width": 380,
+        "height": 200
+      }
     }
   ],
   "connections": {
