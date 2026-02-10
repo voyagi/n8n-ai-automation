@@ -1,0 +1,106 @@
+[
+  {
+    "name": "Sarah Chen",
+    "email": "sarah.chen@techcorp.test",
+    "subject": "Critical API Timeout Issue",
+    "message": "Our production application is experiencing intermittent timeout errors when calling the /api/v2/users endpoint. This started approximately 3 hours ago. Error logs show 504 Gateway Timeout responses. Our team has verified that our side of the network is functioning properly. Can you please investigate this urgently? We have customers unable to access their accounts. Our ticket ID is TC-2024-8831.",
+    "expected_category": "support",
+    "test_case": "urgent_support"
+  },
+  {
+    "name": "Bob",
+    "email": "b@test.local",
+    "subject": "Help",
+    "message": "Not working",
+    "expected_category": "support",
+    "test_case": "minimal_support"
+  },
+  {
+    "name": "Emily Rodriguez",
+    "email": "emily.r@startup.test",
+    "subject": "How to Configure Webhook Retries?",
+    "message": "Hi there! I'm trying to set up webhook event notifications for our integration and I can't find clear documentation on how to configure retry logic when our endpoint is temporarily unavailable. Is there a setting in the dashboard for this, or do we need to handle it ourselves? Thanks for your help!",
+    "expected_category": "support",
+    "test_case": "how_to_question"
+  },
+  {
+    "name": "Michael Thompson",
+    "email": "m.thompson@globalcorp.test",
+    "subject": "Enterprise Pricing Inquiry",
+    "message": "Hello, I'm the Director of Engineering at GlobalCorp (Fortune 500 company). We're evaluating your platform for our enterprise needs and would like to discuss pricing for a 50-person team. We require SSO integration, dedicated support, SLA guarantees, and custom contract terms. Could you connect me with your enterprise sales team? Annual budget is approved. Looking forward to hearing from you.",
+    "expected_category": "sales",
+    "test_case": "enterprise_pricing"
+  },
+  {
+    "name": "Lisa Park",
+    "email": "lisa.park@agency.test",
+    "subject": "Partnership Opportunity - Referral Program",
+    "message": "Hi, I run a digital marketing agency with 200+ clients who could benefit from your automation platform. I'm interested in discussing a partnership or referral program. We've successfully driven over $2M in revenue for similar SaaS partners. Are you currently accepting partnership inquiries? I'd love to schedule a call to explore how we could work together.",
+    "expected_category": "sales",
+    "test_case": "partnership_inquiry"
+  },
+  {
+    "name": "David Kumar",
+    "email": "davidk@example.com",
+    "subject": "Feature Request: Dark Mode Support",
+    "message": "Just wanted to say I absolutely love your platform! The workflow builder is intuitive and powerful. One feature that would make it even better is dark mode support. As someone who works late nights, a dark theme would be a huge quality-of-life improvement. I know many other users have requested this as well. Keep up the great work!",
+    "expected_category": "feedback",
+    "test_case": "positive_feedback"
+  },
+  {
+    "name": "Rachel Green",
+    "email": "rachel.green@example.com",
+    "subject": "Documentation Could Be Better",
+    "message": "I've been trying to implement your API and I have to say, the documentation is quite lacking. Many endpoints are missing examples, error response formats aren't documented, and the search function barely works. I spent 4 hours yesterday trying to figure out authentication only to find the answer buried in a GitHub issue. Please invest in better technical writing. The product itself is solid, but the docs are holding it back.",
+    "expected_category": "feedback",
+    "test_case": "constructive_criticism"
+  },
+  {
+    "name": "John Smith",
+    "email": "johnsmith.seo@webmarketing.test",
+    "subject": "Boost Your Website Rankings by 300% GUARANTEED",
+    "message": "Hello Sir/Madam, I am reaching out from Premium SEO Solutions. We have EXCLUSIVE opportunity to increase your website traffic by 300% in just 30 days GUARANTEED! Our proprietary link-building strategy has helped thousands of businesses dominate Google rankings. LIMITED TIME OFFER: First month only $99 (regular price $499). Visit our website now: http://suspicious-seo-link.xyz/promo?ref=spam123 ACT NOW BEFORE THIS OFFER EXPIRES! Best Regards, John Smith, SEO Expert",
+    "expected_category": "spam",
+    "test_case": "obvious_spam"
+  },
+  {
+    "name": "Crypto Wealth Team",
+    "email": "team@cryptowealth.test",
+    "subject": "🚀 Turn $500 into $50,000 with Our Proven Crypto Strategy",
+    "message": "Dear Future Millionaire, Are you TIRED of missing out on LIFE-CHANGING wealth? Our exclusive crypto trading algorithm has generated 10,000% returns for our members. JOIN NOW and start earning $5,000+ per week in PASSIVE INCOME. No experience needed! Our AI-powered bot does ALL the work. 🤑 SPECIAL BONUS: First 50 members get FREE mentorship (worth $2,999). Click here to claim your spot: [SUSPICIOUS LINK] Don't let this opportunity slip away! Your financial freedom is just ONE CLICK away. To your success, The Crypto Wealth Team",
+    "expected_category": "spam",
+    "test_case": "crypto_spam"
+  },
+  {
+    "name": "Professor Alexandra Whitmore",
+    "email": "a.whitmore@university.test",
+    "subject": "Research Collaboration Request - Machine Learning Applications in Workflow Automation",
+    "message": "Dear Development Team, I am a professor of Computer Science at Metropolitan University conducting research on the efficacy of machine learning algorithms in business process automation. Your platform has come to our attention as a leading example of practical ML implementation. I am writing to inquire whether your team would be interested in a research collaboration. Our study aims to analyze how AI-powered automation tools impact organizational efficiency across different industries. We would conduct a thorough analysis of your system's architecture, interview key stakeholders, and potentially publish our findings in peer-reviewed journals, which would provide valuable academic validation for your technology. The research would be conducted over a 6-month period with full ethical approval from our university's research board. Participants would remain anonymous unless explicit consent is given. In return for your participation, we would share all findings and provide detailed insights that could inform your product roadmap. We have successfully completed similar studies with other major SaaS providers. I would be happy to discuss this further at your convenience. Our preliminary research questions focus on classification accuracy, user adoption patterns, and long-term productivity metrics. Please let me know if this might be of interest. Best regards, Professor Alexandra Whitmore, PhD, Department of Computer Science",
+    "expected_category": "feedback",
+    "test_case": "long_message"
+  },
+  {
+    "name": "Carlos Martinez",
+    "email": "c.martinez@business.test",
+    "subject": "Question About Pricing and Support Options",
+    "message": "Hi, I'm interested in your platform for my consulting business but I'm also having trouble accessing my trial account. Could you help me reset my password AND also send me information about your pricing tiers? I need both support and sales info. Thanks!",
+    "expected_category": "support",
+    "test_case": "mixed_intent"
+  },
+  {
+    "name": "J",
+    "email": "j@x.test",
+    "subject": "Hi",
+    "message": "Test",
+    "expected_category": "feedback",
+    "test_case": "single_char_name"
+  },
+  {
+    "name": "François Müller",
+    "email": "francois.muller@café-international.test",
+    "subject": "Problème avec l'intégration française",
+    "message": "Bonjour, j'ai rencontré un problème avec les caractères accentués dans votre système. Les noms comme 'Müller' et 'café' ne s'affichent pas correctement après synchronisation. Pourriez-vous vérifier le support UTF-8? Merci beaucoup! 🇫🇷",
+    "expected_category": "support",
+    "test_case": "unicode_content"
+  }
+]
