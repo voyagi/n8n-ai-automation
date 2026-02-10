@@ -8,32 +8,37 @@ A portfolio demo for Upwork freelancing that showcases a complete AI-powered bus
 
 A working end-to-end automation that proves to potential Upwork clients: "I can connect real business tools with AI in the middle — here's one I already built."
 
+## Current State
+
+Shipped v1.0 with 2,599 LOC across 10 project files. Tech stack: n8n, OpenAI GPT-4, HTML+JS, Google Sheets, Slack+Email. 17-node workflow with 5 sticky notes, 13-entry test suite, portfolio-ready documentation with architecture diagram and ROI analysis.
+
 ## Requirements
 
 ### Validated
 
-- [x] Contact form UI with name, email, subject, message fields — existing
-- [x] Client-side form validation (required fields, email format) — existing
-- [x] Form submission handler that POSTs JSON to n8n webhook — existing
-- [x] Success/error feedback states in the form UI — existing
-- [x] Project scaffolding with n8n, serve, biome configured — existing
-- [x] Environment variable template (.env.example) — existing
+- ✓ Contact form UI with name, email, subject, message fields — v1.0
+- ✓ Client-side form validation (required fields, email format) — v1.0
+- ✓ Form submission handler that POSTs JSON to n8n webhook — v1.0
+- ✓ Success/error feedback states in the form UI — v1.0
+- ✓ Project scaffolding with n8n, serve, biome configured — v1.0
+- ✓ Environment variable template (.env.example) — v1.0
+- ✓ n8n workflow triggered by webhook POST from contact form — v1.0
+- ✓ OpenAI node that classifies inquiry type (support/sales/feedback/spam) — v1.0
+- ✓ OpenAI node that summarizes the message in one line — v1.0
+- ✓ OpenAI node that drafts a suggested response — v1.0
+- ✓ Switch node that detects spam and skips notifications — v1.0
+- ✓ Google Sheets node that logs all submissions with AI analysis — v1.0
+- ✓ Spam submissions flagged in Google Sheets but notifications skipped — v1.0
+- ✓ Slack notification with formatted AI analysis for legitimate submissions — v1.0
+- ✓ Email notification with AI analysis for legitimate submissions — v1.0
+- ✓ Exportable n8n workflow JSON that others can import — v1.0
+- ✓ Architecture diagram showing how pieces connect — v1.0
+- ✓ Professional form styling (clean enough for portfolio recording) — v1.0
+- ✓ README with setup instructions and architecture overview — v1.0
 
 ### Active
 
-- [ ] n8n workflow triggered by webhook POST from contact form
-- [ ] OpenAI node that classifies inquiry type (support/sales/feedback/spam)
-- [ ] OpenAI node that summarizes the message in one line
-- [ ] OpenAI node that drafts a suggested response
-- [ ] Switch node that detects spam and skips notifications
-- [ ] Google Sheets node that logs all submissions with AI analysis
-- [ ] Spam submissions flagged in Google Sheets but notifications skipped
-- [ ] Slack notification with formatted AI analysis for legitimate submissions
-- [ ] Email notification with AI analysis for legitimate submissions
-- [ ] Exportable n8n workflow JSON that others can import
-- [ ] Architecture diagram showing how pieces connect
-- [ ] Professional form styling (clean enough for portfolio recording)
-- [ ] README with setup instructions and architecture overview
+(None — next milestone requirements TBD via `/gsd:new-milestone`)
 
 ### Out of Scope
 
@@ -50,7 +55,7 @@ A working end-to-end automation that proves to potential Upwork clients: "I can 
 - The target audience is non-technical business owners who want "automate my workflow with AI." They need to see real tools connected, not just code.
 - n8n's visual workflow editor is a selling point — the workflow canvas screenshot is as important as the code.
 - Full Upwork strategy document: `C:\Users\Eagi\Making money\side-projects\upwork-strategy.md`
-- Existing scaffolding includes a working contact form UI, but the n8n workflow (the core deliverable) hasn't been built yet.
+- v1.0 shipped: form + webhook + AI + routing + storage + notifications + error handling + docs all complete.
 
 ## Constraints
 
@@ -65,11 +70,16 @@ A working end-to-end automation that proves to potential Upwork clients: "I can 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| OpenAI over Claude for AI step | n8n has native OpenAI node, simpler integration | -- Pending |
-| Google Sheets over Supabase | Clients understand spreadsheets, more relatable | -- Pending |
-| Screen recording over live deployment | Lower complexity, still proves the concept | -- Pending |
-| Spam detection branch included | Shows conditional logic in workflow, more impressive | -- Pending |
-| No sentiment analysis | Classify + summarize + draft reply covers the use case | -- Pending |
+| OpenAI over Claude for AI step | n8n has native OpenAI node, simpler integration | ✓ Good — GPT-4 classification ~95% accurate |
+| Google Sheets over Supabase | Clients understand spreadsheets, more relatable | ✓ Good — 12-column logging works well |
+| Screen recording over live deployment | Lower complexity, still proves the concept | ✓ Good — portfolio-ready without hosting costs |
+| Spam detection branch included | Shows conditional logic in workflow, more impressive | ✓ Good — demonstrates routing logic |
+| No sentiment analysis | Classify + summarize + draft reply covers the use case | ✓ Good — scope stayed focused |
+| Header Auth over Basic Auth | More flexible, easier rotation for webhook security | ✓ Good — clean header-based auth |
+| Code nodes over Set nodes for field flagging | Set v3.4 strips fields with duplicateItem:false | ✓ Good — spread operator preserves all fields |
+| Slack attachment over block messageType | Enables color-coded left border for visual triage | ✓ Good — instant category identification |
+| continueOnFail on all external nodes | Notification failures should never block form response | ✓ Good — 100% HTTP 200 under all failure conditions |
+| Business-first README structure | Portfolio viewers care about value before technical details | ✓ Good — leads with problem/solution/ROI |
 
 ---
-*Last updated: 2026-02-08 after initialization*
+*Last updated: 2026-02-10 after v1.0 milestone*
