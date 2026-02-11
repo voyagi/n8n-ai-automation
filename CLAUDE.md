@@ -117,6 +117,10 @@ testing, or seeing a rendered page: use the dev-browser skill in
 - **Never use `~` in bash paths** — MSYS expands to `/home/Eagi` not
   `/c/Users/Eagi`
 
+## Test Credentials
+
+<!-- Auto-maintained by GSD — updated when auth tasks execute -->
+
 ## Commands
 
 ```bash
