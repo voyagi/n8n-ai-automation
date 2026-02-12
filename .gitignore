@@ -5,3 +5,8 @@ node_modules/
 *.log
 .vscode/
 tmp/
+
+# Nested node_modules (skills, tools)
+**/node_modules/
+
+**/profiles/browser-data/
