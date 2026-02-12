@@ -1,0 +1,6 @@
+2026/02/09-10:56:53.606 21da8 Reusing MANIFEST C:\Users\Eagi\upwork-n8n-automation\.claude\skills\dev-browser\profiles\browser-data\Default\Local Storage\leveldb/MANIFEST-000001
+2026/02/09-10:56:53.611 21da8 Recovering log #3
+2026/02/09-10:56:53.614 21da8 Reusing old log C:\Users\Eagi\upwork-n8n-automation\.claude\skills\dev-browser\profiles\browser-data\Default\Local Storage\leveldb/000003.log 
+2026/02/09-10:58:48.989 20364 Level-0 table #5: started
+2026/02/09-10:58:48.996 20364 Level-0 table #5: 19426 bytes OK
+2026/02/09-10:58:48.999 20364 Delete type=0 #3

@@ -1,6 +1,8 @@
 // Configuration for webhook submission
 // - webhookUrl: n8n webhook URL (update after workflow import)
-// - webhookAuth: Must match n8n Header Auth credential
+// - webhookAuth: Must match n8n Header Auth credential value
+//   NOTE: This is a demo placeholder. Replace with your own token
+//   from the Header Auth credential you create in n8n.
 // - timeout: Request timeout in milliseconds
 const CONFIG = {
 	webhookUrl: "http://localhost:5678/webhook/contact-form",
@@ -13,9 +15,19 @@ const submitBtn = document.getElementById("submit-btn");
 const errorBanner = document.getElementById("error-banner");
 const successCard = document.getElementById("success-card");
 const spamDetected = document.getElementById("spam-detected");
-const sendAnother = document.getElementById("send-another");
-const spamSendAnother = document.getElementById("spam-send-another");
 const fields = form.querySelectorAll("input, textarea");
+const views = [form, successCard, spamDetected];
+let isSubmitting = false;
+
+/**
+ * Switch to a specific view, hiding all others and the error banner.
+ */
+function showView(target) {
+	errorBanner.classList.add("hidden");
+	for (const view of views) {
+		view.classList.toggle("hidden", view !== target);
+	}
+}
 
 // Track which fields have been blurred (for "punish late" UX)
 const hasBlurred = new WeakMap();
@@ -30,37 +42,11 @@ function validateField(field) {
 	if (!errorSpan) return;
 
 	if (field.validity.valid) {
-		// Valid: clear error, keep has-blurred for green border
 		errorSpan.textContent = "";
 		field.classList.remove("invalid");
 	} else {
-		// Invalid: show field-specific error
 		field.classList.add("invalid");
-
-		let message = "";
-		if (field.validity.valueMissing) {
-			// Field-specific required messages
-			switch (field.name) {
-				case "name":
-					message = "Please enter your name";
-					break;
-				case "email":
-					message = "Please enter your email address";
-					break;
-				case "subject":
-					message = "Please enter a subject";
-					break;
-				case "message":
-					message = "Please enter your message";
-					break;
-				default:
-					message = "This field is required";
-			}
-		} else if (field.validity.typeMismatch && field.type === "email") {
-			message = "Please enter a valid email address (e.g., name@example.com)";
-		}
-
-		errorSpan.textContent = message;
+		errorSpan.textContent = getValidationMessage(field.name, field.validity);
 	}
 }
 
@@ -84,6 +70,8 @@ fields.forEach((field) => {
 // Form submission handler
 form.addEventListener("submit", async (e) => {
 	e.preventDefault();
+	if (isSubmitting) return;
+	isSubmitting = true;
 
 	// Validate all fields before submitting
 	fields.forEach((field) => {
@@ -96,6 +84,7 @@ form.addEventListener("submit", async (e) => {
 	if (!form.checkValidity()) {
 		const firstInvalid = form.querySelector(":invalid");
 		if (firstInvalid) firstInvalid.focus();
+		isSubmitting = false;
 		return;
 	}
 
@@ -138,22 +127,18 @@ form.addEventListener("submit", async (e) => {
 		// Success: parse response and populate results card
 		const result = await response.json();
 
-		// Check if submission was flagged as spam
-		// Supports both explicit spam flag (Spam Response node) and score-based detection
-		const isSpam = result.spam === true || (result.spam_score && result.spam_score > 70);
+		const isSpam = isSpamResult(result);
 		if (isSpam) {
 			// Populate spam detection details
-			document.getElementById("spam-score").textContent = result.spam_score || "—";
+			document.getElementById("spam-score").textContent =
+				result.spam_score || "—";
 			document.getElementById("spam-reason").textContent =
 				result.spam_reason || "No reason provided";
 			document.getElementById("spam-category").textContent =
 				result.category || "—";
 
 			// Hide form, show spam detection message
-			form.classList.add("hidden");
-			errorBanner.classList.add("hidden");
-			successCard.classList.add("hidden");
-			spamDetected.classList.remove("hidden");
+			showView(spamDetected);
 		} else {
 			// Populate AI analysis results for legitimate submissions
 			document.getElementById("result-category").textContent =
@@ -162,29 +147,13 @@ form.addEventListener("submit", async (e) => {
 				result.summary || "Your message is being processed";
 
 			// Hide form, show success card
-			form.classList.add("hidden");
-			errorBanner.classList.add("hidden");
-			spamDetected.classList.add("hidden");
-			successCard.classList.remove("hidden");
+			showView(successCard);
 		}
 	} catch (err) {
-		// Differentiated error handling
-		let errorMessage;
-
-		if (err.name === "TimeoutError") {
-			errorMessage =
-				"The request took too long. The server may be busy — please try again.";
-		} else if (err.message && err.message.includes("Failed to fetch")) {
-			errorMessage =
-				"Could not reach the server. Please check that n8n is running and try again.";
-		} else {
-			errorMessage = err.message || "Something went wrong. Please try again.";
-		}
-
-		errorBanner.textContent = errorMessage;
+		errorBanner.textContent = getErrorMessage(err);
 		errorBanner.classList.remove("hidden");
 	} finally {
-		// Re-enable fields and reset button
+		isSubmitting = false;
 		fields.forEach((f) => {
 			f.disabled = false;
 		});
@@ -196,9 +165,7 @@ form.addEventListener("submit", async (e) => {
 
 // "Send another" handler: reset form and clear validation states
 function resetForm() {
-	successCard.classList.add("hidden");
-	spamDetected.classList.add("hidden");
-	form.classList.remove("hidden");
+	showView(form);
 	form.reset();
 
 	// Reset result values
@@ -221,12 +188,10 @@ function resetForm() {
 	});
 }
 
-sendAnother.addEventListener("click", (e) => {
-	e.preventDefault();
-	resetForm();
-});
-
-spamSendAnother.addEventListener("click", (e) => {
-	e.preventDefault();
-	resetForm();
+// Delegated handler for all "send another" links
+document.addEventListener("click", (e) => {
+	if (e.target.closest(".send-another")) {
+		e.preventDefault();
+		resetForm();
+	}
 });

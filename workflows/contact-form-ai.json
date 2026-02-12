@@ -176,7 +176,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ $json }}",
+        "responseBody": "={{ JSON.stringify($json) }}",
         "options": {
           "responseCode": 400
         }
@@ -366,7 +366,7 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1wE6VxbEkzXbQ3zHH8-sNy8L3TfyKtDi5DVisGrNcSdY",
+          "value": "YOUR_SPREADSHEET_ID",
           "mode": "id"
         },
         "sheetName": {
@@ -583,7 +583,7 @@
         100
       ],
       "parameters": {
-        "content": "## Input Validation\n\nWebhook receives POST, Normalize Fields extracts fields, Validate Fields checks requirements.\n\n**Required:** name, email, message\n**Optional:** subject\n**Auth:** Header token (X-Webhook-Auth)",
+        "content": "## Input Validation\n\nWebhook receives POST, Normalize Fields extracts fields, Validate Fields checks requirements.\n\n**Required:** name, email, subject, message\n**Auth:** Header token (X-Webhook-Auth)",
         "width": 320,
         "height": 180
       }
