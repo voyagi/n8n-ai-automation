@@ -7,7 +7,7 @@
 const CONFIG = {
 	webhookUrl: "http://localhost:5678/webhook/contact-form",
 	webhookAuth: "demo-token-2026",
-	timeout: 15000,
+	timeout: 30000,
 };
 
 const form = document.getElementById("contact-form");
@@ -17,6 +17,15 @@ const successCard = document.getElementById("success-card");
 const spamDetected = document.getElementById("spam-detected");
 const fields = form.querySelectorAll("input, textarea");
 const views = [form, successCard, spamDetected];
+
+// Cache result elements to avoid repeated getElementById calls
+const resultEls = {
+	category: document.getElementById("result-category"),
+	summary: document.getElementById("result-summary"),
+	spamScore: document.getElementById("spam-score"),
+	spamReason: document.getElementById("spam-reason"),
+	spamCategory: document.getElementById("spam-category"),
+};
 let isSubmitting = false;
 
 /**
@@ -31,6 +40,12 @@ function showView(target) {
 
 // Track which fields have been blurred (for "punish late" UX)
 const hasBlurred = new WeakMap();
+
+function markBlurred(field) {
+	hasBlurred.set(field, true);
+	field.classList.add("has-blurred");
+	validateField(field);
+}
 
 /**
  * Validate a single field and display/clear error message
@@ -53,11 +68,7 @@ function validateField(field) {
 // Validation event handlers: "reward early, punish late"
 fields.forEach((field) => {
 	// On blur: mark as blurred and validate
-	field.addEventListener("blur", () => {
-		hasBlurred.set(field, true);
-		field.classList.add("has-blurred");
-		validateField(field);
-	});
+	field.addEventListener("blur", () => markBlurred(field));
 
 	// On input: only validate if already blurred (clear errors as user types fix)
 	field.addEventListener("input", () => {
@@ -75,9 +86,7 @@ form.addEventListener("submit", async (e) => {
 
 	// Validate all fields before submitting
 	fields.forEach((field) => {
-		hasBlurred.set(field, true);
-		field.classList.add("has-blurred");
-		validateField(field);
+		markBlurred(field);
 	});
 
 	// If form invalid, focus first invalid field and stop
@@ -130,20 +139,17 @@ form.addEventListener("submit", async (e) => {
 		const isSpam = isSpamResult(result);
 		if (isSpam) {
 			// Populate spam detection details
-			document.getElementById("spam-score").textContent =
-				result.spam_score || "—";
-			document.getElementById("spam-reason").textContent =
+			resultEls.spamScore.textContent = result.spam_score || "—";
+			resultEls.spamReason.textContent =
 				result.spam_reason || "No reason provided";
-			document.getElementById("spam-category").textContent =
-				result.category || "—";
+			resultEls.spamCategory.textContent = result.category || "—";
 
 			// Hide form, show spam detection message
 			showView(spamDetected);
 		} else {
 			// Populate AI analysis results for legitimate submissions
-			document.getElementById("result-category").textContent =
-				result.category || "Processing";
-			document.getElementById("result-summary").textContent =
+			resultEls.category.textContent = result.category || "Processing";
+			resultEls.summary.textContent =
 				result.summary || "Your message is being processed";
 
 			// Hide form, show success card
@@ -168,14 +174,10 @@ function resetForm() {
 	showView(form);
 	form.reset();
 
-	// Reset result values
-	document.getElementById("result-category").textContent = "—";
-	document.getElementById("result-summary").textContent = "—";
-
-	// Reset spam detection values
-	document.getElementById("spam-score").textContent = "—";
-	document.getElementById("spam-reason").textContent = "—";
-	document.getElementById("spam-category").textContent = "—";
+	// Reset all result display values
+	for (const el of Object.values(resultEls)) {
+		el.textContent = "—";
+	}
 
 	// Clear all validation states
 	fields.forEach((field) => {

@@ -3,6 +3,10 @@
  * Loaded in browser via <script> tag (globals) and in Node.js via require().
  */
 
+// Spam score threshold - submissions scoring above this are flagged as spam.
+// Must match the Route by Spam Score switch node (rightValue) in the n8n workflow.
+const SPAM_THRESHOLD = 70;
+
 /**
  * Return a human-readable validation message for a form field.
  * @param {string} fieldName - The field's name attribute
@@ -37,7 +41,11 @@ function getValidationMessage(fieldName, validity) {
  * @returns {boolean} True if the result indicates spam
  */
 function isSpamResult(result) {
-	return result.spam === true || (result.spam_score && result.spam_score > 70);
+	return (
+		result.spam === true ||
+		(typeof result.spam_score === "number" &&
+			result.spam_score > SPAM_THRESHOLD)
+	);
 }
 
 /**
@@ -57,5 +65,10 @@ function getErrorMessage(err) {
 
 // Node.js exports (no-op in browser where module is undefined)
 if (typeof module !== "undefined" && module.exports) {
-	module.exports = { getValidationMessage, isSpamResult, getErrorMessage };
+	module.exports = {
+		getValidationMessage,
+		isSpamResult,
+		getErrorMessage,
+		SPAM_THRESHOLD,
+	};
 }

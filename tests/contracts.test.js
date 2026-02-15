@@ -164,30 +164,8 @@ describe("contract edge cases", () => {
 		assert.equal(response.spam_score <= 70, true);
 	});
 
-	it("spam_score of 71 triggers spam path", () => {
-		assert.ok(71 > 70, "Score 71 exceeds the 70 threshold");
-	});
-
-	it("category_confidence is a number between 0 and 100", () => {
-		const values = [0, 50, 85, 100];
-		for (const val of values) {
-			assert.equal(typeof val, "number");
-			assert.ok(val >= 0 && val <= 100);
-		}
-	});
-
-	it("all valid categories are recognized", () => {
-		const validCategories = [
-			"support",
-			"sales",
-			"feedback",
-			"general_inquiry",
-			"spam",
-		];
-		assert.equal(validCategories.length, 5);
-		for (const cat of validCategories) {
-			assert.equal(typeof cat, "string");
-			assert.ok(cat.length > 0);
-		}
+	it("spam_score of 71 triggers spam in isSpamResult", () => {
+		const { isSpamResult } = require("../public/validation.js");
+		assert.equal(isSpamResult({ spam_score: 71 }), true);
 	});
 });

@@ -6,17 +6,28 @@
 	"scripts": {
 		"dev": "npx serve public -l 3000",
 		"n8n": "npx n8n start",
-		"test": "node --test tests/script.test.js tests/workflow.test.js tests/contracts.test.js",
+		"test": "node --test tests/script.test.js tests/workflow.test.js tests/contracts.test.js tests/security.test.js",
 		"check": "biome check --write .",
 		"lint": "biome lint --write .",
 		"format": "biome format --write ."
 	},
 	"dependencies": {
+		"n8n": "^2.7.4"
+	},
+	"overrides": {
 		"axios": "^1.13.5",
 		"form-data": "^4.0.4",
-		"n8n": "^2.7.4",
 		"qs": "^6.14.1",
-		"semver": "^5.7.2"
+		"semver": "^7.6.3",
+		"tar": "^7.5.7",
+		"fast-xml-parser": "^5.3.4",
+		"@modelcontextprotocol/sdk": "^1.26.0",
+		"nodemailer": "^7.0.7",
+		"@azure/identity": "^4.2.1",
+		"langsmith": "^0.4.6",
+		"langchain": "^1.2.3",
+		"@langchain/core": "^1.1.8",
+		"@langchain/community": "^1.1.14"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.14",

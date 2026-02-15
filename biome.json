@@ -7,7 +7,12 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["public/**/*.js", "tests/**/*.js", "*.json"]
+		"includes": [
+			"public/**/*.js",
+			"public/**/*.html",
+			"tests/**/*.js",
+			"*.json"
+		]
 	},
 	"formatter": {
 		"enabled": true,

@@ -27,48 +27,12 @@
     },
     {
       "parameters": {
-        "mode": "manual",
-        "duplicateItem": false,
-        "assignments": {
-          "assignments": [
-            {
-              "id": "field-name",
-              "name": "name",
-              "value": "={{ $json.body.name }}",
-              "type": "string"
-            },
-            {
-              "id": "field-email",
-              "name": "email",
-              "value": "={{ $json.body.email }}",
-              "type": "string"
-            },
-            {
-              "id": "field-subject",
-              "name": "subject",
-              "value": "={{ $json.body.subject }}",
-              "type": "string"
-            },
-            {
-              "id": "field-message",
-              "name": "message",
-              "value": "={{ $json.body.message }}",
-              "type": "string"
-            },
-            {
-              "id": "field-timestamp",
-              "name": "submittedAt",
-              "value": "={{ $now.toISO() }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
+        "jsCode": "// Spread form fields for forward compatibility - new form fields pass through automatically.\n// Downstream nodes (Sheets, Slack, Email) explicitly select which fields to use.\nconst body = $input.first().json.body || {};\nreturn [{ json: { ...body, submittedAt: new Date().toISOString() } }];"
       },
       "id": "normalize-fields",
       "name": "Normalize Fields",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
       "position": [
         480,
         300
@@ -519,9 +483,9 @@
       "parameters": {
         "fromEmail": "noreply@example.com",
         "toEmail": "admin@example.com",
-        "subject": "New Contact: {{ $json.name }} - {{ $json.category }}",
+        "subject": "New Contact: {{ ($json.name || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;') }} - {{ $json.category }}",
         "emailFormat": "html",
-        "html": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }\n    .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }\n    .header { background: #2563eb; color: #ffffff; padding: 24px; text-align: center; }\n    .header h1 { margin: 0; font-size: 24px; font-weight: 600; }\n    .content { padding: 24px; }\n    .section { margin-bottom: 24px; }\n    .section-title { font-size: 16px; font-weight: 600; color: #1f2937; margin-bottom: 12px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; }\n    .field { margin-bottom: 12px; }\n    .field-label { font-weight: 600; color: #4b5563; font-size: 14px; }\n    .field-value { color: #1f2937; margin-top: 4px; }\n    .message-box { background: #f9fafb; border-left: 4px solid #2563eb; padding: 12px 16px; margin-top: 8px; border-radius: 4px; }\n    .footer { background: #f9fafb; padding: 16px 24px; text-align: center; color: #6b7280; font-size: 12px; border-top: 1px solid #e5e7eb; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>New Contact Form Submission</h1>\n    </div>\n    <div class=\"content\">\n      <div class=\"section\">\n        <div class=\"section-title\">Contact Information</div>\n        <div class=\"field\">\n          <div class=\"field-label\">Name</div>\n          <div class=\"field-value\">{{ $json.name }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Email</div>\n          <div class=\"field-value\">{{ $json.email }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Subject</div>\n          <div class=\"field-value\">{{ $json.subject }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Message</div>\n          <div class=\"message-box\">{{ $json.message }}</div>\n        </div>\n      </div>\n      <div class=\"section\">\n        <div class=\"section-title\">AI Analysis</div>\n        <div class=\"field\">\n          <div class=\"field-label\">Category</div>\n          <div class=\"field-value\">{{ $json.category }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Spam Score</div>\n          <div class=\"field-value\">{{ $json.spam_score }}/100</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Summary</div>\n          <div class=\"field-value\">{{ $json.summary }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Suggested Reply</div>\n          <div class=\"message-box\">{{ $json.draft_response }}</div>\n        </div>\n      </div>\n    </div>\n    <div class=\"footer\">\n      Submitted at {{ $json.submittedAt }}\n    </div>\n  </div>\n</body>\n</html>",
+        "html": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <style>\n    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f4f4f4; }\n    .container { max-width: 600px; margin: 20px auto; background: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }\n    .header { background: #2563eb; color: #ffffff; padding: 24px; text-align: center; }\n    .header h1 { margin: 0; font-size: 24px; font-weight: 600; }\n    .content { padding: 24px; }\n    .section { margin-bottom: 24px; }\n    .section-title { font-size: 16px; font-weight: 600; color: #1f2937; margin-bottom: 12px; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; }\n    .field { margin-bottom: 12px; }\n    .field-label { font-weight: 600; color: #4b5563; font-size: 14px; }\n    .field-value { color: #1f2937; margin-top: 4px; }\n    .message-box { background: #f9fafb; border-left: 4px solid #2563eb; padding: 12px 16px; margin-top: 8px; border-radius: 4px; }\n    .footer { background: #f9fafb; padding: 16px 24px; text-align: center; color: #6b7280; font-size: 12px; border-top: 1px solid #e5e7eb; }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>New Contact Form Submission</h1>\n    </div>\n    <div class=\"content\">\n      <div class=\"section\">\n        <div class=\"section-title\">Contact Information</div>\n        <div class=\"field\">\n          <div class=\"field-label\">Name</div>\n          <div class=\"field-value\">{{ ($json.name || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;') }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Email</div>\n          <div class=\"field-value\">{{ ($json.email || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;') }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Subject</div>\n          <div class=\"field-value\">{{ ($json.subject || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;') }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Message</div>\n          <div class=\"message-box\">{{ ($json.message || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;') }}</div>\n        </div>\n      </div>\n      <div class=\"section\">\n        <div class=\"section-title\">AI Analysis</div>\n        <div class=\"field\">\n          <div class=\"field-label\">Category</div>\n          <div class=\"field-value\">{{ $json.category }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Spam Score</div>\n          <div class=\"field-value\">{{ $json.spam_score }}/100</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Summary</div>\n          <div class=\"field-value\">{{ ($json.summary || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;') }}</div>\n        </div>\n        <div class=\"field\">\n          <div class=\"field-label\">Suggested Reply</div>\n          <div class=\"message-box\">{{ ($json.draft_response || '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;') }}</div>\n        </div>\n      </div>\n    </div>\n    <div class=\"footer\">\n      Submitted at {{ $json.submittedAt }}\n    </div>\n  </div>\n</body>\n</html>",
         "options": {
           "appendAttribution": false
         }

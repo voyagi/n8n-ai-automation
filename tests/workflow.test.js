@@ -215,3 +215,40 @@ describe("resilience configuration", () => {
 		assert.equal(node.maxTries, 3);
 	});
 });
+
+describe("normalize-fields resilience", () => {
+	it("uses Code node (not Set) for explicit field handling", () => {
+		const node = nodesById.get("normalize-fields");
+		assert.equal(node.type, "n8n-nodes-base.code");
+	});
+
+	it("uses spread operator for forward compatibility", () => {
+		const node = nodesById.get("normalize-fields");
+		assert.ok(
+			node.parameters.jsCode.includes("...body"),
+			"Code should use spread to preserve upstream fields",
+		);
+	});
+});
+
+describe("threshold synchronization", () => {
+	const { SPAM_THRESHOLD } = require("../public/validation.js");
+
+	it("Switch node threshold matches client-side SPAM_THRESHOLD", () => {
+		const switchNode = nodesById.get("route-spam");
+		const condition =
+			switchNode.parameters.rules.values[0].conditions.conditions[0];
+		assert.equal(
+			condition.rightValue,
+			SPAM_THRESHOLD,
+			`Workflow threshold (${condition.rightValue}) must match SPAM_THRESHOLD (${SPAM_THRESHOLD})`,
+		);
+	});
+
+	it("Switch uses 'gt' operator matching isSpamResult '>' comparison", () => {
+		const switchNode = nodesById.get("route-spam");
+		const condition =
+			switchNode.parameters.rules.values[0].conditions.conditions[0];
+		assert.equal(condition.operator.operation, "gt");
+	});
+});
