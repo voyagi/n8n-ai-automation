@@ -209,10 +209,10 @@ describe("resilience configuration", () => {
 		assert.equal(node.continueOnFail, true);
 	});
 
-	it("Analyze Contact Form retries up to 3 times", () => {
+	it("Analyze Contact Form retries up to 2 times", () => {
 		const node = nodesById.get("analyze-contact-form");
 		assert.equal(node.retryOnFail, true);
-		assert.equal(node.maxTries, 3);
+		assert.equal(node.maxTries, 2);
 	});
 });
 
@@ -251,4 +251,22 @@ describe("threshold synchronization", () => {
 			switchNode.parameters.rules.values[0].conditions.conditions[0];
 		assert.equal(condition.operator.operation, "gt");
 	});
+});
+
+describe("code node references", () => {
+	const codeNodes = workflow.nodes.filter(
+		(n) => n.type === "n8n-nodes-base.code" && n.parameters.jsCode,
+	);
+
+	for (const node of codeNodes) {
+		const refs = [...node.parameters.jsCode.matchAll(/\$\('([^']+)'\)/g)];
+		for (const [, refName] of refs) {
+			it(`"${node.name}" references existing node "${refName}"`, () => {
+				assert.ok(
+					nodesByName.has(refName),
+					`Node "${node.name}" references "${refName}" which does not exist`,
+				);
+			});
+		}
+	}
 });

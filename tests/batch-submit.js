@@ -159,7 +159,7 @@ async function main() {
 	console.log(`✓ Successful: ${successCount}`);
 	console.log(`✗ Failed: ${failCount}`);
 	console.log(
-		`Category accuracy: ${categoryMatchCount}/${successCount} (${((categoryMatchCount / successCount) * 100).toFixed(1)}%)`,
+		`Category accuracy: ${categoryMatchCount}/${successCount} (${successCount > 0 ? ((categoryMatchCount / successCount) * 100).toFixed(1) : "0.0"}%)`,
 	);
 	console.log(`Average duration: ${formatDuration(avgDuration)}`);
 	console.log(`Total time: ${formatDuration(totalDuration)}`);

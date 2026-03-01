@@ -60,6 +60,9 @@ function getErrorMessage(err) {
 	if (err.message?.includes("Failed to fetch")) {
 		return "Could not reach the server. Please check that n8n is running and try again.";
 	}
+	if (err.name === "SyntaxError" || err.message?.includes("Unexpected token")) {
+		return "The server returned an unexpected response. Please try again.";
+	}
 	return err.message || "Something went wrong. Please try again.";
 }
 

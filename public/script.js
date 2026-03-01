@@ -136,7 +136,7 @@ form.addEventListener("submit", async (e) => {
 		// Success: parse response and populate results card
 		const result = await response.json();
 
-		const isSpam = isSpamResult(result);
+		const isSpam = result.status === "spam";
 		if (isSpam) {
 			// Populate spam detection details
 			resultEls.spamScore.textContent = result.spam_score || "—";
