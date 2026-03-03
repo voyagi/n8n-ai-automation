@@ -10,3 +10,7 @@ tmp/
 **/node_modules/
 
 **/profiles/browser-data/
+
+# Local skill/review artifacts
+.claude/skills/n8n/
+.claude/reviews/
