@@ -136,6 +136,9 @@ form.addEventListener("submit", async (e) => {
 		// Success: parse response and populate results card
 		const result = await response.json();
 
+		if (result.status !== "spam" && result.status !== "success") {
+			throw new Error("Unexpected response format from server");
+		}
 		const isSpam = result.status === "spam";
 		if (isSpam) {
 			// Populate spam detection details

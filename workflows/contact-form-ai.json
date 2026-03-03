@@ -94,7 +94,7 @@
             },
             {
               "id": "condition-name-length",
-              "leftValue": "={{ $json.name.length }}",
+              "leftValue": "={{ (($json.name ?? '').toString()).length }}",
               "rightValue": 100,
               "operator": {
                 "type": "number",
@@ -103,7 +103,7 @@
             },
             {
               "id": "condition-email-length",
-              "leftValue": "={{ $json.email.length }}",
+              "leftValue": "={{ (($json.email ?? '').toString()).length }}",
               "rightValue": 100,
               "operator": {
                 "type": "number",
@@ -112,7 +112,7 @@
             },
             {
               "id": "condition-subject-length",
-              "leftValue": "={{ $json.subject.length }}",
+              "leftValue": "={{ (($json.subject ?? '').toString()).length }}",
               "rightValue": 200,
               "operator": {
                 "type": "number",
@@ -121,7 +121,7 @@
             },
             {
               "id": "condition-message-length",
-              "leftValue": "={{ $json.message.length }}",
+              "leftValue": "={{ (($json.message ?? '').toString()).length }}",
               "rightValue": 2000,
               "operator": {
                 "type": "number",
@@ -311,7 +311,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const apiResponse = $input.first().json;\nconst rawContent = apiResponse.choices?.[0]?.message?.content || '';\n\nconst ALLOWED_CATEGORIES = ['support', 'sales', 'feedback', 'general_inquiry', 'spam'];\n\nfunction clampScore(val) {\n  const n = Number(val);\n  if (isNaN(n)) return 50;\n  return Math.max(0, Math.min(100, Math.round(n)));\n}\n\nfunction safeCategory(val) {\n  return ALLOWED_CATEGORIES.includes(val) ? val : 'general_inquiry';\n}\n\nlet parsed;\ntry {\n  parsed = JSON.parse(rawContent);\n} catch (e) {\n  return [{\n    json: {\n      category: 'general_inquiry',\n      category_confidence: 0,\n      summary: 'Unable to process submission',\n      spam_score: 50,\n      spam_reason: 'Processing error - could not parse AI response',\n      draft_response: '',\n      parse_error: true,\n      name: $('Normalize Fields').first().json.name,\n      email: $('Normalize Fields').first().json.email,\n      subject: $('Normalize Fields').first().json.subject,\n      message: $('Normalize Fields').first().json.message,\n      submittedAt: $('Normalize Fields').first().json.submittedAt\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    category: safeCategory(parsed.category),\n    category_confidence: clampScore(parsed.category_confidence),\n    summary: (parsed.summary || 'No summary available').substring(0, 100),\n    spam_score: clampScore(parsed.spam_score),\n    spam_reason: parsed.spam_reason || 'No spam indicators detected',\n    draft_response: parsed.draft_response || '',\n    name: $('Normalize Fields').first().json.name,\n    email: $('Normalize Fields').first().json.email,\n    subject: $('Normalize Fields').first().json.subject,\n    message: $('Normalize Fields').first().json.message,\n    submittedAt: $('Normalize Fields').first().json.submittedAt\n  }\n}];"
+        "jsCode": "const apiResponse = $input.first().json;\nconst rawContent = apiResponse.choices?.[0]?.message?.content || '';\n\nconst ALLOWED_CATEGORIES = ['support', 'sales', 'feedback', 'general_inquiry', 'spam'];\n\nfunction clampScore(val) {\n  const n = Number(val);\n  if (isNaN(n)) return 50;\n  return Math.max(0, Math.min(100, Math.round(n)));\n}\n\nfunction safeText(val, fallback, max) {\n  const s = typeof val === 'string' ? val : (val == null ? fallback : String(val));\n  return s.substring(0, max);\n}\n\nfunction safeCategory(val) {\n  return ALLOWED_CATEGORIES.includes(val) ? val : 'general_inquiry';\n}\n\nlet parsed;\ntry {\n  parsed = JSON.parse(rawContent);\n} catch (e) {\n  return [{\n    json: {\n      category: 'general_inquiry',\n      category_confidence: 0,\n      summary: 'Unable to process submission',\n      spam_score: 50,\n      spam_reason: 'Processing error - could not parse AI response',\n      draft_response: '',\n      parse_error: true,\n      name: $('Normalize Fields').first().json.name,\n      email: $('Normalize Fields').first().json.email,\n      subject: $('Normalize Fields').first().json.subject,\n      message: $('Normalize Fields').first().json.message,\n      submittedAt: $('Normalize Fields').first().json.submittedAt\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    category: safeCategory(parsed.category),\n    category_confidence: clampScore(parsed.category_confidence),\n    summary: safeText(parsed.summary, 'No summary available', 100),\n    spam_score: clampScore(parsed.spam_score),\n    spam_reason: safeText(parsed.spam_reason, 'No spam indicators detected', 300),\n    draft_response: safeText(parsed.draft_response, '', 2000),\n    name: $('Normalize Fields').first().json.name,\n    email: $('Normalize Fields').first().json.email,\n    subject: $('Normalize Fields').first().json.subject,\n    message: $('Normalize Fields').first().json.message,\n    submittedAt: $('Normalize Fields').first().json.submittedAt\n  }\n}];"
       },
       "id": "parse-ai-response",
       "name": "Parse AI Response",
@@ -547,7 +547,7 @@
     },
     {
       "parameters": {
-        "jsCode": "// Convergence point: receives input from both Slack and Email notification nodes.\n// Takes the first item (both carry same form data) and checks all upstream outcomes.\nconst item = $input.first().json;\nconst warnings = [];\n\n// Check if AI analysis was unavailable\nif (item.ai_failed) {\n  warnings.push('AI analysis unavailable');\n}\n\n// Check if Slack notification failed\ntry {\n  const slackData = $('Send Slack Notification').all();\n  if (slackData.length === 0 || slackData[0].json.error) {\n    warnings.push('Slack notification failed');\n  }\n} catch (e) {\n  warnings.push('Slack notification failed');\n}\n\n// Check if Email notification failed\ntry {\n  const emailData = $('Send Email Notification').all();\n  if (emailData.length === 0 || emailData[0].json.error) {\n    warnings.push('Email notification failed');\n  }\n} catch (e) {\n  warnings.push('Email notification failed');\n}\n\n// Check if Google Sheets logging failed\ntry {\n  const sheetsData = $('Log to Google Sheets').all();\n  if (sheetsData.length === 0 || sheetsData[0].json.error) {\n    warnings.push('Google Sheets logging failed');\n  }\n} catch (e) {\n  warnings.push('Google Sheets logging failed');\n}\n\nreturn [{\n  json: {\n    ...item,\n    warnings: warnings.length > 0 ? warnings.join(', ') : 'None'\n  }\n}];"
+        "jsCode": "// Convergence point: receives input from both Slack and Email notification nodes.\n// Takes the first item (both carry same form data) and checks all upstream outcomes.\nconst item = $input.first().json;\nconst warnings = [];\n\n// Check if AI analysis was unavailable\nif (item.ai_failed) {\n  warnings.push('AI analysis unavailable');\n}\n\n// Check if Slack notification failed\ntry {\n  const slackData = $('Send Slack Notification').all();\n  if (slackData.length === 0 || slackData[0].json.error) {\n    warnings.push('Slack notification failed');\n  }\n} catch (e) {\n  warnings.push('Slack notification failed');\n}\n\n// Check if Email notification failed\ntry {\n  const emailData = $('Send Email Notification').all();\n  if (emailData.length === 0 || emailData[0].json.error) {\n    warnings.push('Email notification failed');\n  }\n} catch (e) {\n  warnings.push('Email notification failed');\n}\n\n// Note: Google Sheets check removed — this node executes before Log to Google Sheets,\n// so $('Log to Google Sheets').all() would always return empty and produce false warnings.\n\nreturn [{\n  json: {\n    ...item,\n    warnings: warnings.length > 0 ? warnings.join(', ') : 'None'\n  }\n}];"
       },
       "id": "build-warnings",
       "name": "Build Warnings",
@@ -598,7 +598,7 @@
         80
       ],
       "parameters": {
-        "content": "## AI Processing\n\nOpenAI classifies the inquiry and generates:\n- **Category:** support / sales / feedback / spam\n- **Spam score:** 0-100%\n- **Summary:** One-line description\n- **Draft reply:** Suggested response\n\nIf OpenAI fails, fallback defaults are injected (category: general_inquiry, spam_score: 50 quarantine).",
+        "content": "## AI Processing\n\nOpenAI classifies the inquiry and generates:\n- **Category:** support / sales / feedback / general_inquiry / spam\n- **Spam score:** 0-100%\n- **Summary:** One-line description\n- **Draft reply:** Suggested response\n\nIf OpenAI fails, fallback defaults are injected (category: general_inquiry, spam_score: 50 quarantine).",
         "width": 340,
         "height": 200
       }

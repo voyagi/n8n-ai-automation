@@ -52,7 +52,7 @@ This section maps relevant OWASP Top 10 risks to this project.
 | **Client-side auth token** | Visible in page source. Acceptable for demo. Production requires a server-side proxy. |
 | **No rate limiting** | Webhook accepts unlimited requests. See Rate Limiting section below. |
 | **No CSRF protection** | Stateless webhook with no session cookies. CORS + auth header provide baseline protection. |
-| **AI fail-open** | AI failure defaults to non-spam (spam_score=0). During OpenAI outage, spam passes through with notifications. Acceptable for demo, production should queue for manual review. |
+| **AI fail-open** | AI failure defaults to neutral scoring (spam_score=50). During OpenAI outage, spam may pass through with notifications. Acceptable for demo, production should queue for manual review. |
 
 ## Rate Limiting
 

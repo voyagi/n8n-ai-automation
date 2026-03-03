@@ -6,5 +6,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/dependency-review-action@v4
-        # Fails on private repos without GHAS; auto-works once repo is public
-        continue-on-error: true
+        # Allow failure on private repos (no GHAS); enforce on public repos
+        continue-on-error: ${{ github.event.repository.private }}
