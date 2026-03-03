@@ -27,13 +27,13 @@
 		"@modelcontextprotocol/sdk": "^1.26.0",
 		"nodemailer": "^7.0.7",
 		"@azure/identity": "^4.2.1",
-		"langsmith": "^0.4.6",
+		"langsmith": "^0.5.0",
 		"langchain": "^1.2.3",
 		"@langchain/core": "^1.1.8",
 		"@langchain/community": "^1.1.14"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.14",
+		"@biomejs/biome": "2.4.5",
 		"serve": "^14.2.5"
 	}
 }
