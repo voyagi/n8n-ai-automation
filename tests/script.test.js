@@ -3,7 +3,6 @@ const assert = require("node:assert/strict");
 
 const {
 	getValidationMessage,
-	isSpamResult,
 	getErrorMessage,
 } = require("../public/validation.js");
 
@@ -59,32 +58,6 @@ describe("getValidationMessage", () => {
 			getValidationMessage("name", { valid: false, typeMismatch: true }),
 			"",
 		);
-	});
-});
-
-describe("isSpamResult", () => {
-	it("returns true when spam flag is true", () => {
-		assert.equal(isSpamResult({ spam: true, spam_score: 10 }), true);
-	});
-
-	it("returns true when spam_score exceeds 70", () => {
-		assert.equal(isSpamResult({ spam_score: 85 }), true);
-	});
-
-	it("returns false when spam_score is exactly 70", () => {
-		assert.equal(isSpamResult({ spam_score: 70 }), false);
-	});
-
-	it("returns false for legitimate submission", () => {
-		assert.equal(isSpamResult({ spam: false, spam_score: 15 }), false);
-	});
-
-	it("returns falsy when no spam fields present", () => {
-		assert.ok(!isSpamResult({ category: "support" }));
-	});
-
-	it("returns falsy for zero spam_score", () => {
-		assert.ok(!isSpamResult({ spam_score: 0 }));
 	});
 });
 

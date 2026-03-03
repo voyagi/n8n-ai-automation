@@ -19,26 +19,26 @@
 		<form id="contact-form" novalidate>
 			<div class="form-row">
 				<div class="form-group">
-					<input type="text" id="name" name="name" placeholder="Your full name" required>
+					<input type="text" id="name" name="name" placeholder="Your full name" maxlength="100" required>
 					<label for="name">Name</label>
 					<span class="field-error" data-for="name" aria-live="polite"></span>
 				</div>
 
 				<div class="form-group">
-					<input type="email" id="email" name="email" placeholder="you@example.com" required>
+					<input type="email" id="email" name="email" placeholder="you@example.com" maxlength="100" required>
 					<label for="email">Email</label>
 					<span class="field-error" data-for="email" aria-live="polite"></span>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+				<input type="text" id="subject" name="subject" placeholder="What's this about?" maxlength="100" required>
 				<label for="subject">Subject</label>
 				<span class="field-error" data-for="subject" aria-live="polite"></span>
 			</div>
 
 			<div class="form-group">
-				<textarea id="message" name="message" rows="5" placeholder="Tell us how we can help..." required></textarea>
+				<textarea id="message" name="message" rows="5" placeholder="Tell us how we can help..." maxlength="2000" required></textarea>
 				<label for="message">Message</label>
 				<span class="field-error" data-for="message" aria-live="polite"></span>
 			</div>
