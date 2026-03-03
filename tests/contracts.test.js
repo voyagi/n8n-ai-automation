@@ -17,8 +17,39 @@ function validateContract(data, contract) {
 	}
 }
 
-// Contract definitions matching the n8n workflow response shapes
-const successContract = {
+// ---------------------------------------------------------------------------
+// API response contracts — match the actual HTTP response shapes
+// ---------------------------------------------------------------------------
+
+// Success Response node: { status, category, summary, spam_score, draft_response }
+const apiSuccessContract = {
+	status: "string",
+	category: "string",
+	summary: "string",
+	spam_score: "number",
+	draft_response: "string",
+};
+
+// Spam Response node: { status, category, summary, spam_score, spam_reason }
+const apiSpamContract = {
+	status: "string",
+	category: "string",
+	summary: "string",
+	spam_score: "number",
+	spam_reason: "string",
+};
+
+// Validation Error node: { error, message }
+const apiErrorContract = {
+	error: "string",
+	message: "string",
+};
+
+// ---------------------------------------------------------------------------
+// Internal node data contract — fields flowing between workflow nodes
+// ---------------------------------------------------------------------------
+
+const internalNodeContract = {
 	category: "string",
 	category_confidence: "number",
 	summary: "string",
@@ -32,140 +63,128 @@ const successContract = {
 	submittedAt: "string",
 };
 
-const spamContract = {
-	spam: "boolean",
-	message: "string",
-	category: "string",
-	spam_score: "number",
-	spam_reason: "string",
-};
-
-const errorContract = {
-	error: "string",
-	message: "string",
-};
-
-describe("success response contract", () => {
-	const supportResponse = {
+describe("API success response contract", () => {
+	const successResponse = {
+		status: "success",
 		category: "support",
-		category_confidence: 92,
 		summary: "User unable to log in with error message",
 		spam_score: 5,
-		spam_reason: "Legitimate support request",
 		draft_response:
 			"Hi John, thank you for reaching out about your login issue.",
-		name: "John Doe",
-		email: "john@example.com",
-		subject: "Login issue",
-		message: "I cannot log in to my account",
-		submittedAt: "2026-02-11T15:30:00.000Z",
-		is_spam: false,
-		ai_failed: false,
 	};
 
 	it("support response satisfies contract", () => {
-		validateContract(supportResponse, successContract);
+		validateContract(successResponse, apiSuccessContract);
 	});
 
 	it("sales response satisfies contract", () => {
 		validateContract(
 			{
-				...supportResponse,
+				...successResponse,
 				category: "sales",
 				summary: "Enterprise pricing inquiry",
 			},
-			successContract,
+			apiSuccessContract,
 		);
 	});
 
 	it("feedback response satisfies contract", () => {
 		validateContract(
 			{
-				...supportResponse,
+				...successResponse,
 				category: "feedback",
 				summary: "Positive product feedback",
 			},
-			successContract,
+			apiSuccessContract,
 		);
 	});
 
 	it("general_inquiry response satisfies contract", () => {
 		validateContract(
 			{
-				...supportResponse,
+				...successResponse,
 				category: "general_inquiry",
 				summary: "Company information request",
 			},
-			successContract,
+			apiSuccessContract,
 		);
 	});
 
 	it("allows extra fields beyond the contract", () => {
-		const withExtras = { ...supportResponse, custom_field: "extra" };
-		validateContract(withExtras, successContract);
+		const withExtras = { ...successResponse, custom_field: "extra" };
+		validateContract(withExtras, apiSuccessContract);
 	});
 
 	it("allows empty draft_response for low-confidence results", () => {
-		const minimal = { ...supportResponse, draft_response: "" };
-		validateContract(minimal, successContract);
+		const minimal = { ...successResponse, draft_response: "" };
+		validateContract(minimal, apiSuccessContract);
 	});
 });
 
-describe("spam response contract", () => {
+describe("API spam response contract", () => {
 	const spamResponse = {
-		spam: true,
-		message: "Submission flagged as spam",
+		status: "spam",
 		category: "spam",
+		summary: "Promotional SEO content",
 		spam_score: 95,
 		spam_reason: "Promotional SEO content with suspicious links",
 	};
 
 	it("spam response satisfies contract", () => {
-		validateContract(spamResponse, spamContract);
+		validateContract(spamResponse, apiSpamContract);
 	});
 
 	it("high-score spam satisfies contract", () => {
-		validateContract({ ...spamResponse, spam_score: 100 }, spamContract);
+		validateContract({ ...spamResponse, spam_score: 100 }, apiSpamContract);
 	});
 
 	it("borderline spam (score 71) satisfies contract", () => {
-		validateContract({ ...spamResponse, spam_score: 71 }, spamContract);
+		validateContract({ ...spamResponse, spam_score: 71 }, apiSpamContract);
 	});
 });
 
-describe("error response contract", () => {
+describe("API error response contract", () => {
 	it("validation error satisfies contract", () => {
 		validateContract(
 			{
 				error: "Validation failed",
 				message: "All fields are required and email must be valid.",
 			},
-			errorContract,
+			apiErrorContract,
 		);
 	});
 });
 
+describe("internal node data contract", () => {
+	const nodeData = {
+		category: "support",
+		category_confidence: 92,
+		summary: "User unable to log in",
+		spam_score: 5,
+		spam_reason: "Legitimate support request",
+		draft_response: "Hi John, thank you for reaching out.",
+		name: "John Doe",
+		email: "john@example.com",
+		subject: "Login issue",
+		message: "I cannot log in to my account",
+		submittedAt: "2026-02-11T15:30:00.000Z",
+	};
+
+	it("internal node data satisfies contract", () => {
+		validateContract(nodeData, internalNodeContract);
+	});
+});
+
 describe("contract edge cases", () => {
-	it("spam_score of exactly 70 is not spam", () => {
+	it("spam_score of exactly 70 is not spam (routes to legitimate)", () => {
 		const response = {
+			status: "success",
 			category: "general_inquiry",
-			category_confidence: 50,
 			summary: "Borderline submission",
 			spam_score: 70,
-			spam_reason: "Borderline content",
 			draft_response: "Thank you for your message.",
-			name: "Test",
-			email: "test@example.com",
-			subject: "Test",
-			message: "Test message",
-			submittedAt: "2026-02-11T00:00:00.000Z",
 		};
-		validateContract(response, successContract);
+		validateContract(response, apiSuccessContract);
 		assert.equal(response.spam_score <= 70, true);
-	});
-
-	it("spam_score of 71 triggers spam in isSpamResult", () => {
-		const { isSpamResult } = require("../public/validation.js");
-		assert.equal(isSpamResult({ spam_score: 71 }), true);
 	});
 });

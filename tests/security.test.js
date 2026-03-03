@@ -5,7 +5,6 @@ const path = require("node:path");
 
 const {
 	getValidationMessage,
-	isSpamResult,
 	getErrorMessage,
 	SPAM_THRESHOLD,
 } = require("../public/validation.js");
@@ -18,61 +17,6 @@ describe("SPAM_THRESHOLD constant", () => {
 	it("is exported and equals 70", () => {
 		assert.equal(typeof SPAM_THRESHOLD, "number");
 		assert.equal(SPAM_THRESHOLD, 70);
-	});
-
-	it("isSpamResult uses SPAM_THRESHOLD as boundary", () => {
-		assert.equal(isSpamResult({ spam_score: SPAM_THRESHOLD }), false);
-		assert.equal(isSpamResult({ spam_score: SPAM_THRESHOLD + 1 }), true);
-	});
-});
-
-// ---------------------------------------------------------------------------
-// Type coercion attacks on isSpamResult
-// ---------------------------------------------------------------------------
-
-describe("isSpamResult type coercion resistance", () => {
-	it("rejects string spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: "71" }), false);
-	});
-
-	it("rejects array spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: [71] }), false);
-	});
-
-	it("rejects object spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: { value: 71 } }), false);
-	});
-
-	it("handles NaN spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: NaN }), false);
-	});
-
-	it("handles Infinity spam_score (treated as spam)", () => {
-		assert.equal(isSpamResult({ spam_score: Infinity }), true);
-	});
-
-	it("handles negative spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: -1 }), false);
-	});
-
-	it("handles null spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: null }), false);
-	});
-
-	it("handles undefined spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: undefined }), false);
-	});
-
-	it("handles boolean true spam_score", () => {
-		assert.equal(isSpamResult({ spam_score: true }), false);
-	});
-
-	it("handles empty object", () => {
-		assert.equal(isSpamResult({}), false);
-	});
-
-	it("handles object with only unrelated fields", () => {
-		assert.equal(isSpamResult({ category: "support", name: "Test" }), false);
 	});
 });
 
@@ -93,15 +37,6 @@ describe("XSS input handling", () => {
 	it("getErrorMessage does not inject HTML from error messages", () => {
 		const msg = getErrorMessage(new Error("<img src=x onerror=alert(1)>"));
 		assert.equal(typeof msg, "string");
-	});
-
-	it("isSpamResult ignores XSS payloads in string fields", () => {
-		const result = {
-			spam: false,
-			spam_score: 10,
-			category: "<script>alert(1)</script>",
-		};
-		assert.equal(isSpamResult(result), false);
 	});
 });
 

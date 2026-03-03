@@ -36,19 +36,6 @@ function getValidationMessage(fieldName, validity) {
 }
 
 /**
- * Determine if a webhook response represents a spam detection.
- * @param {Object} result - The parsed webhook response
- * @returns {boolean} True if the result indicates spam
- */
-function isSpamResult(result) {
-	return (
-		result.spam === true ||
-		(typeof result.spam_score === "number" &&
-			result.spam_score > SPAM_THRESHOLD)
-	);
-}
-
-/**
  * Map a fetch error to a user-friendly error message.
  * @param {Error} err - The error from the fetch call
  * @returns {string} Human-readable error message
@@ -70,7 +57,6 @@ function getErrorMessage(err) {
 if (typeof module !== "undefined" && module.exports) {
 	module.exports = {
 		getValidationMessage,
-		isSpamResult,
 		getErrorMessage,
 		SPAM_THRESHOLD,
 	};

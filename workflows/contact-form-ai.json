@@ -93,6 +93,33 @@
               }
             },
             {
+              "id": "condition-name-length",
+              "leftValue": "={{ $json.name.length }}",
+              "rightValue": 100,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            },
+            {
+              "id": "condition-email-length",
+              "leftValue": "={{ $json.email.length }}",
+              "rightValue": 100,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            },
+            {
+              "id": "condition-subject-length",
+              "leftValue": "={{ $json.subject.length }}",
+              "rightValue": 200,
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            },
+            {
               "id": "condition-message-length",
               "leftValue": "={{ $json.message.length }}",
               "rightValue": 2000,
@@ -166,7 +193,7 @@
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ status: 'success', category: $json.category, summary: $json.summary, spam_score: $json.spam_score, draft_response: $json.draft_response, warnings: $json.warnings }) }}",
+        "responseBody": "={{ JSON.stringify({ status: 'success', category: $json.category, summary: $json.summary, spam_score: $json.spam_score, draft_response: $json.draft_response }) }}",
         "options": {
           "responseCode": 200
         }
@@ -284,7 +311,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const apiResponse = $input.first().json;\nconst rawContent = apiResponse.choices?.[0]?.message?.content || '';\n\nlet parsed;\ntry {\n  parsed = JSON.parse(rawContent);\n} catch (e) {\n  return [{\n    json: {\n      category: 'general_inquiry',\n      category_confidence: 0,\n      summary: 'Unable to process submission',\n      spam_score: 0,\n      spam_reason: 'Processing error - could not parse AI response',\n      draft_response: '',\n      parse_error: true,\n      name: $('Normalize Fields').first().json.name,\n      email: $('Normalize Fields').first().json.email,\n      subject: $('Normalize Fields').first().json.subject,\n      message: $('Normalize Fields').first().json.message,\n      submittedAt: $('Normalize Fields').first().json.submittedAt\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    category: parsed.category || 'general_inquiry',\n    category_confidence: Number(parsed.category_confidence) || 50,\n    summary: (parsed.summary || 'No summary available').substring(0, 100),\n    spam_score: Number(parsed.spam_score) || 0,\n    spam_reason: parsed.spam_reason || 'No spam indicators detected',\n    draft_response: parsed.draft_response || '',\n    name: $('Normalize Fields').first().json.name,\n    email: $('Normalize Fields').first().json.email,\n    subject: $('Normalize Fields').first().json.subject,\n    message: $('Normalize Fields').first().json.message,\n    submittedAt: $('Normalize Fields').first().json.submittedAt\n  }\n}];"
+        "jsCode": "const apiResponse = $input.first().json;\nconst rawContent = apiResponse.choices?.[0]?.message?.content || '';\n\nconst ALLOWED_CATEGORIES = ['support', 'sales', 'feedback', 'general_inquiry', 'spam'];\n\nfunction clampScore(val) {\n  const n = Number(val);\n  if (isNaN(n)) return 50;\n  return Math.max(0, Math.min(100, Math.round(n)));\n}\n\nfunction safeCategory(val) {\n  return ALLOWED_CATEGORIES.includes(val) ? val : 'general_inquiry';\n}\n\nlet parsed;\ntry {\n  parsed = JSON.parse(rawContent);\n} catch (e) {\n  return [{\n    json: {\n      category: 'general_inquiry',\n      category_confidence: 0,\n      summary: 'Unable to process submission',\n      spam_score: 50,\n      spam_reason: 'Processing error - could not parse AI response',\n      draft_response: '',\n      parse_error: true,\n      name: $('Normalize Fields').first().json.name,\n      email: $('Normalize Fields').first().json.email,\n      subject: $('Normalize Fields').first().json.subject,\n      message: $('Normalize Fields').first().json.message,\n      submittedAt: $('Normalize Fields').first().json.submittedAt\n    }\n  }];\n}\n\nreturn [{\n  json: {\n    category: safeCategory(parsed.category),\n    category_confidence: clampScore(parsed.category_confidence),\n    summary: (parsed.summary || 'No summary available').substring(0, 100),\n    spam_score: clampScore(parsed.spam_score),\n    spam_reason: parsed.spam_reason || 'No spam indicators detected',\n    draft_response: parsed.draft_response || '',\n    name: $('Normalize Fields').first().json.name,\n    email: $('Normalize Fields').first().json.email,\n    subject: $('Normalize Fields').first().json.subject,\n    message: $('Normalize Fields').first().json.message,\n    submittedAt: $('Normalize Fields').first().json.submittedAt\n  }\n}];"
       },
       "id": "parse-ai-response",
       "name": "Parse AI Response",
@@ -297,7 +324,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const json = item.json;\n\n  // Detect if AI analysis failed or returned incomplete data\n  // continueOnFail passes error object, parse errors set parse_error flag\n  const aiMissing = !json.category ||\n                    json.category === '' ||\n                    json.parse_error === true ||\n                    json.error !== undefined;\n\n  if (aiMissing) {\n    return {\n      json: {\n        // Preserve original form data\n        name: json.name || '',\n        email: json.email || '',\n        subject: json.subject || '',\n        message: json.message || '',\n        submittedAt: json.submittedAt || '',\n\n        // Default AI values for graceful degradation\n        category: 'general_inquiry',\n        category_confidence: 0,\n        summary: 'Unable to process - AI analysis unavailable',\n        spam_score: 0,\n        spam_reason: 'AI analysis failed - defaulting to non-spam',\n        draft_response: '',\n\n        // Flag for downstream warnings tracking\n        ai_failed: true\n      }\n    };\n  }\n\n  // AI processing succeeded — add ai_failed: false for consistent field shape\n  return { json: { ...json, ai_failed: false } };\n});"
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const json = item.json;\n\n  // Detect if AI analysis failed or returned incomplete data\n  // continueOnFail passes error object, parse errors set parse_error flag\n  const aiMissing = !json.category ||\n                    json.category === '' ||\n                    json.parse_error === true ||\n                    json.error !== undefined;\n\n  if (aiMissing) {\n    return {\n      json: {\n        // Preserve original form data\n        name: json.name || '',\n        email: json.email || '',\n        subject: json.subject || '',\n        message: json.message || '',\n        submittedAt: json.submittedAt || '',\n\n        // Default AI values for graceful degradation\n        // spam_score 50 = quarantine zone (below 70 threshold but visibly not 'clean')\n        category: 'general_inquiry',\n        category_confidence: 0,\n        summary: 'Unable to process - AI analysis unavailable',\n        spam_score: 50,\n        spam_reason: 'AI analysis failed - quarantine score applied',\n        draft_response: '',\n\n        // Flag for downstream warnings tracking\n        ai_failed: true\n      }\n    };\n  }\n\n  // AI processing succeeded — add ai_failed: false for consistent field shape\n  return { json: { ...json, ai_failed: false } };\n});"
       },
       "id": "ai-fallback-handler",
       "name": "AI Fallback Handler",
@@ -414,12 +441,12 @@
                 "type": "section",
                 "fields": [
                   {
-                    "type": "mrkdwn",
-                    "text": "*Name:*\n{{ $json.name }}"
+                    "type": "plain_text",
+                    "text": "Name:\n{{ $json.name }}"
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Email:*\n{{ $json.email }}"
+                    "type": "plain_text",
+                    "text": "Email:\n{{ $json.email }}"
                   }
                 ]
               },
@@ -431,8 +458,8 @@
                     "text": "*Category:*\n{{ $json.category }}"
                   },
                   {
-                    "type": "mrkdwn",
-                    "text": "*Subject:*\n{{ $json.subject }}"
+                    "type": "plain_text",
+                    "text": "Subject:\n{{ $json.subject }}"
                   }
                 ]
               },
@@ -571,7 +598,7 @@
         80
       ],
       "parameters": {
-        "content": "## AI Processing\n\nOpenAI classifies the inquiry and generates:\n- **Category:** support / sales / feedback / spam\n- **Spam score:** 0-100%\n- **Summary:** One-line description\n- **Draft reply:** Suggested response\n\nIf OpenAI fails, fallback defaults are injected (category: general_inquiry, spam_score: 0).",
+        "content": "## AI Processing\n\nOpenAI classifies the inquiry and generates:\n- **Category:** support / sales / feedback / spam\n- **Spam score:** 0-100%\n- **Summary:** One-line description\n- **Draft reply:** Suggested response\n\nIf OpenAI fails, fallback defaults are injected (category: general_inquiry, spam_score: 50 quarantine).",
         "width": 340,
         "height": 200
       }
