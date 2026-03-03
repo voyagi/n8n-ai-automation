@@ -2,4 +2,9 @@ name: Dependency Review
 on: [pull_request]
 jobs:
   review:
-    uses: voyagi/.github-workflows/.github/workflows/dependency-review.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        # Fails on private repos without GHAS; auto-works once repo is public
+        continue-on-error: true
