@@ -1,24 +1,17 @@
 {
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"extends": ["config:recommended"],
-	"constraints": { "npm": "<11" },
-	"prConcurrentLimit": 3,
-	"platformAutomerge": false,
-	"automerge": true,
-	"automergeType": "pr",
-	"automergeStrategy": "squash",
-	"packageRules": [
-		{
-			"matchUpdateTypes": ["patch"],
-			"automerge": true,
-			"groupName": "patch updates"
-		},
-		{
-			"matchUpdateTypes": ["minor"],
-			"automerge": true,
-			"groupName": "minor updates"
-		},
-		{ "matchUpdateTypes": ["major"], "automerge": false }
-	],
-	"schedule": ["before 9am on Monday"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>voyagi/renovate-config"
+  ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "@langchain/*",
+        "langchain",
+        "langsmith"
+      ],
+      "groupName": "langchain ecosystem",
+      "automerge": false
+    }
+  ]
 }
