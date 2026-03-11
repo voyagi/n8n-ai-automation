@@ -10,6 +10,8 @@ Manual contact form processing is repetitive and time-consuming. Every submissio
 
 This n8n automation replaces the entire manual pipeline with an AI-powered workflow that processes submissions in 5-10 seconds. When a user submits the contact form, an n8n webhook receives the data, OpenAI's GPT-4 analyzes the content to classify category and sentiment, a Switch node routes spam submissions away from human attention, and legitimate inquiries are logged to Google Sheets while triggering color-coded Slack notifications and HTML email alerts. The entire process completes before the user finishes reading the success message on screen.
 
+![Contact form with a realistic enterprise inquiry](screenshots/contact-form.png)
+
 ## Business Impact
 
 | Metric | Manual Process | Automated Process | Improvement |
@@ -46,6 +48,10 @@ flowchart LR
 ```
 
 [Detailed architecture documentation](docs/ARCHITECTURE.md)
+
+![n8n workflow canvas showing the full automation pipeline](screenshots/n8n-workflow.png)
+
+![Successful execution with all nodes completed](screenshots/execution-result.png)
 
 ## Features
 
