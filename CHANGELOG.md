@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/voyagi/upwork-n8n-automation/compare/v1.0.0...v1.0.1) (2026-03-11)
+
+
+### Bug Fixes
+
+* **deps:** override simple-git to 3.33.0 for critical RCE fix ([#17](https://github.com/voyagi/upwork-n8n-automation/issues/17)) ([65fe74a](https://github.com/voyagi/upwork-n8n-automation/commit/65fe74a4df042948624a9b3dfd4417a50abf21fb))
+
 ## 1.0.0 (2026-03-03)
 
 
