@@ -1,17 +1,11 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "github>voyagi/renovate-config"
-  ],
-  "packageRules": [
-    {
-      "matchPackagePatterns": [
-        "@langchain/*",
-        "langchain",
-        "langsmith"
-      ],
-      "groupName": "langchain ecosystem",
-      "automerge": false
-    }
-  ]
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"extends": ["github>voyagi/renovate-config"],
+	"packageRules": [
+		{
+			"matchPackagePatterns": ["@langchain/*", "langchain", "langsmith"],
+			"groupName": "langchain ecosystem",
+			"automerge": false
+		}
+	]
 }
