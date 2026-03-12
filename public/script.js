@@ -136,10 +136,17 @@ form.addEventListener("submit", async (e) => {
 		// Success: parse response and populate results card
 		const result = await response.json();
 
-		if (result.status !== "spam" && result.status !== "success") {
+		// Determine spam vs success: use explicit status field if present,
+		// otherwise infer from spam_score threshold (handles workflow variants)
+		const isSpam =
+			result.status === "spam" ||
+			result.spam === true ||
+			(typeof result.spam_score === "number" &&
+				result.spam_score > SPAM_THRESHOLD);
+		const isSuccess = result.status === "success" || result.category;
+		if (!isSpam && !isSuccess) {
 			throw new Error("Unexpected response format from server");
 		}
-		const isSpam = result.status === "spam";
 		if (isSpam) {
 			// Populate spam detection details
 			resultEls.spamScore.textContent = result.spam_score || "—";
