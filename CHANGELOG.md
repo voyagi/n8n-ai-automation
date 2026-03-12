@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/voyagi/upwork-n8n-automation/compare/v1.0.1...v1.0.2) (2026-03-12)
+
+
+### Bug Fixes
+
+* **form:** make response handling resilient to workflow variants ([#20](https://github.com/voyagi/upwork-n8n-automation/issues/20)) ([ad7f615](https://github.com/voyagi/upwork-n8n-automation/commit/ad7f615a5048685faddaf355108eb7044f9cf73e))
+
 ## [1.0.1](https://github.com/voyagi/upwork-n8n-automation/compare/v1.0.0...v1.0.1) (2026-03-11)
 
 
