@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3](https://github.com/voyagi/upwork-n8n-automation/compare/v1.0.2...v1.0.3) (2026-03-13)
+
+
+### Bug Fixes
+
+* resilient response handling + repo cleanup for public visibility ([#22](https://github.com/voyagi/upwork-n8n-automation/issues/22)) ([76b9dd3](https://github.com/voyagi/upwork-n8n-automation/commit/76b9dd306abf1fe6acf8088de6e7a7834e13822d))
+
 ## [1.0.2](https://github.com/voyagi/upwork-n8n-automation/compare/v1.0.1...v1.0.2) (2026-03-12)
 
 
