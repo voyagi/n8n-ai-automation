@@ -3,10 +3,7 @@
 ## Purpose
 
 Portfolio demo for an Upwork freelancing profile. Demonstrates ability to
-build AI-powered workflow automations using n8n. This is project #2 of 4
-portfolio pieces.
-
-Full Upwork strategy: `C:\Users\Eagi\Making money\side-projects\upwork-strategy.md`
+build AI-powered workflow automations using n8n.
 
 ## What to Build
 
@@ -101,10 +98,6 @@ For the Upwork portfolio:
 4. Screenshot the Google Sheet with processed entries
 5. Export a clean workflow JSON that clients could import
 
-
-## Test Credentials
-
-<!-- Auto-maintained by GSD — updated when auth tasks execute -->
 
 ## Commands
 
