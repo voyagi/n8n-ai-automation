@@ -3,7 +3,7 @@
 	"extends": ["github>voyagi/renovate-config"],
 	"packageRules": [
 		{
-			"matchPackagePatterns": ["@langchain/*", "langchain", "langsmith"],
+			"matchPackageNames": ["@langchain/*", "langchain", "langsmith"],
 			"groupName": "langchain ecosystem",
 			"automerge": false
 		}
