@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/voyagi/n8n-ai-automation/compare/v1.0.3...v1.0.4) (2026-03-16)
+
+
+### Bug Fixes
+
+* migrate Renovate config from matchPackagePatterns to matchPackageNames ([#26](https://github.com/voyagi/n8n-ai-automation/issues/26)) ([4f3d759](https://github.com/voyagi/n8n-ai-automation/commit/4f3d759ea5a5a506d3a31fa6b476b84296137e60)), closes [#24](https://github.com/voyagi/n8n-ai-automation/issues/24)
+
 ## [1.0.3](https://github.com/voyagi/upwork-n8n-automation/compare/v1.0.2...v1.0.3) (2026-03-13)
 
 
