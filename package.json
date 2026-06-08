@@ -4,7 +4,7 @@
 	"private": true,
 	"description": "AI-powered form processing automation with n8n — Upwork portfolio demo",
 	"engines": {
-		"npm": ">=10.0.0 <11"
+		"npm": ">=11.10.0"
 	},
 	"scripts": {
 		"dev": "npx serve public -l 3000",
